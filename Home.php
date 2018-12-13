@@ -93,7 +93,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-up" data-aos-delay="100">Welcome to more.</h1>
+                <h1 data-aos="fade-up" data-aos-delay="100"><?php echo $lang[$default]['PRESIDENTIAL_TASK']?></h1>
                 <h2 data-aos="fade-up" data-aos-delay="300">the multipurpose psd wordrpess theme</h2>
                 <h4 data-aos="fade-up" data-aos-delay="500">Getup and rise, for the new chapter of your life</h4>
                 <p data-aos="fade-up" data-aos-delay="700"><a href="about.html" class="btn btn-success">Get Started</a></p>
