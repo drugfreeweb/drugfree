@@ -142,6 +142,7 @@ header .fa {
     height: 772px;
     position: relative;
     background-image: url(../images/home_pic.jpg);
+	
     background-repeat: no-repeat;
     background-position: top;
     background-size: cover;

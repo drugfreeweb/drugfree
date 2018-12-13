@@ -8,6 +8,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
 	
 
  ?>
+ 
 <html >
 
 <head >
@@ -22,7 +23,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/main.css">
-	   <link href="css/style_2.css" rel="stylesheet" />
+	<link  rel="stylesheet" href="css/style_2.css" />
 
     <title><?php echo $lang[$default]['Free country from drugs']?></title>
 </head>
@@ -71,8 +72,16 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                     <li class="nav-item">
                         <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="services.html"><?php echo $lang[$default]['DISTRICT']?></a>
+                    <li class="nav-item" >
+					<div class="dropdown">
+                        <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['DISTRICT']?></a>
+					
+						<div class="dropdown-content" style="min-width:120px;" >
+							<a href="#">Link 1</a>
+							<a href="#">Link 2</a>
+							<a href="#">Link 3</a>
+						</div>
+					</div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
@@ -83,6 +92,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                     <li class="nav-item">
                         <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
                     </li>
+					
                 </ul>
             </div>
         </div>
