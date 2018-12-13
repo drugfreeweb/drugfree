@@ -1,0 +1,2119 @@
+var RESPONSIVEUI = {};
+
+RESPONSIVEUI.responsiveTabs = function () {
+    var $tabSets = $('.responsive-tabs');
+	//$('.home .responsive-tabs h2:first-of-type').addClass('first');
+	
+    if (!$tabSets.hasClass('responsive-tabs--enabled')) {	// if we haven't already called this function and enabled tabs
+        $tabSets.addClass('responsive-tabs--enabled');
+		
+        //loop through all sets of tabs on the page
+        var tablistcount = 1;
+
+        $tabSets.each(function () {
+
+            var $tabs = $(this);
+
+            // add tab heading and tab panel classes
+            $tabs.children('h1,h2,h3,h4,h5,h6').addClass('responsive-tabs__heading');
+            $tabs.children('div').addClass('responsive-tabs__panel');
+
+            // determine if markup already identifies the active tab panel for this set of tabs
+            // if not then set first heading and tab to be the active one
+            var $activePanel = $tabs.find('.responsive-tabs__panel--active');
+            if (!$activePanel.length) {
+                var $activePanel = $tabs.find('.responsive-tabs__panel').first().addClass('responsive-tabs__panel--active');
+				$activePanel.prev().addClass('responsive-tabs__heading--active');
+            }
+
+            $tabs.find('.responsive-tabs__panel').not('.responsive-tabs__panel--active').hide().attr('aria-hidden', 'true'); //hide all except active panel
+            $activePanel.attr('aria-hidden', 'false');
+            /* make active tab panel hidden for mobile */
+            $activePanel.addClass('responsive-tabs__panel--closed-accordion-only');
+
+            // wrap tabs in container - to be dynamically resized to help prevent page jump
+            var $tabsWrapper = $('<div/>', { Class: 'responsive-tabs-wrapper' });
+            $tabs.wrap($tabsWrapper);
+
+            var highestHeight = 0;
+
+            // determine height of tallest tab panel. Used later to prevent page jump when tabs are clicked
+            $tabs.find('.responsive-tabs__panel').each(function () {
+                var tabHeight = $(this).height();
+                if (tabHeight > highestHeight) {
+                    highestHeight = tabHeight;
+                }
+            })
+
+            //create the tab list
+            var $tabList = $('<ul/>', { Class: 'responsive-tabs__list', 'role': 'tablist' });
+
+            //loop through each heading in set
+            var tabcount = 1;
+            $tabs.find('.responsive-tabs__heading').each(function () {
+
+                var $tabHeading = $(this);
+                var $tabPanel = $(this).next();
+
+                $tabHeading.attr('tabindex', 0);
+
+                // CREATE TAB ITEMS (VISIBLE ON DESKTOP)
+                //create tab list item from heading
+                //associate tab list item with tab panel
+                var $tabListItem = $('<li/>', {
+                    Class: 'responsive-tabs__list__item',
+                    id: 'tablist' + tablistcount + '-tab' + tabcount,
+                    'aria-controls': 'tablist' + tablistcount + '-panel' + tabcount,
+                    'role': 'tab',
+                    tabindex: 0,
+                    text: $tabHeading.text(),
+                    keydown: function (objEvent) {
+                        if (objEvent.keyCode == 13) { // if user presses 'enter'
+                            $tabListItem.click();
+                        }
+                    },
+                    click: function () {
+                        //Show associated panel
+
+                        //set height of tab container to highest panel height to avoid page jump
+                        $tabsWrapper.css('height', highestHeight);
+
+                        // remove hidden mobile class from any other panel as we'll want that panel to be open at mobile size
+                        $tabs.find('.responsive-tabs__panel--closed-accordion-only').removeClass('responsive-tabs__panel--closed-accordion-only');
+
+                        // close current panel and remove active state from its (hidden on desktop) heading
+                        $tabs.find('.responsive-tabs__panel--active').toggle().removeClass('responsive-tabs__panel--active').attr('aria-hidden', 'true').prev().removeClass('responsive-tabs__heading--active');
+
+                        //make this tab panel active
+                        $tabPanel.toggle().addClass('responsive-tabs__panel--active').attr('aria-hidden', 'false');
+
+                        //make the hidden heading active
+                        $tabHeading.addClass('responsive-tabs__heading--active');
+
+                        //remove active state from currently active tab list item
+                        $tabList.find('.responsive-tabs__list__item--active').removeClass('responsive-tabs__list__item--active');
+
+                        //make this tab active
+                        $tabListItem.addClass('responsive-tabs__list__item--active');
+
+                        //reset height of tab panels to auto
+                        $tabsWrapper.css('height', 'auto');
+
+                        //initialize slider
+                        $('.slide2').is(':visible') ?
+                        $('.slide2').mtslider({
+                            animation: "slide",
+                            animationLoop: false,
+                            slideshow: false,
+                            controlNav: false,
+                            itemWidth: 200,
+                            itemMargin: 5,
+                            minItems: 1,
+                            maxItems: 2,
+                            controlsContainer: '.mtslide-container'
+                        }) : null;
+
+                        $('.slide3').is(':visible') ?
+                        $('.slide3').mtslider({
+                            animation: "slide",
+                            animationLoop: false,
+                            slideshow: false,
+                            controlNav: false,
+                            itemWidth: 200,
+                            itemMargin: 5,
+                            minItems: 1,
+                            maxItems: 2,
+                            controlsContainer: '.mtslide-container'
+                        }) : null;
+                    }
+                });
+
+                //associate tab panel with tab list item
+                $tabPanel.attr({
+                    'role': 'tabpanel',
+                    'aria-labelledby': $tabListItem.attr('id'),
+                    id: 'tablist' + tablistcount + '-panel' + tabcount
+                });
+
+                // if this is the active panel then make it the active tab item
+                if ($tabPanel.hasClass('responsive-tabs__panel--active')) {
+                    $tabListItem.addClass('responsive-tabs__list__item--active');
+                }
+
+                // add tab item
+                $tabList.append($tabListItem);
+
+
+                // TAB HEADINGS (VISIBLE ON MOBILE)
+                // if user presses 'enter' on tab heading trigger the click event
+                $tabHeading.keydown(function (objEvent) {
+                    if (objEvent.keyCode == 13) {
+                        $tabHeading.click();
+                    }
+                })
+
+                //toggle tab panel if click heading (on mobile)
+                $tabHeading.click(function () {
+
+                    // remove any hidden mobile class
+                    $tabs.find('.responsive-tabs__panel--closed-accordion-only').removeClass('responsive-tabs__panel--closed-accordion-only');
+
+                    // if this isn't currently active
+                    if (!$tabHeading.hasClass('responsive-tabs__heading--active')) {
+                        //get position of active heading 
+                        if ($('.responsive-tabs__heading--active').length) {
+                            var oldActivePos = $('.responsive-tabs__heading--active').offset().top;
+                        }
+
+                        // close currently active panel and remove active state from any hidden heading
+                        $tabs.find('.responsive-tabs__panel--active').slideToggle().removeClass('responsive-tabs__panel--active').prev().removeClass('responsive-tabs__heading--active');
+
+                        //close all tabs
+                        $tabs.find('.responsive-tabs__panel').hide().attr('aria-hidden', 'true');
+
+                        //open this panel
+                        $tabPanel.slideToggle().addClass('responsive-tabs__panel--active').attr('aria-hidden', 'false');
+
+                        // make this heading active
+                        $tabHeading.addClass('responsive-tabs__heading--active');
+
+                        var $currentActive = $tabs.find('.responsive-tabs__list__item--active');
+
+                        //set the active tab list item (for desktop)
+                        $currentActive.removeClass('responsive-tabs__list__item--active');
+                        var panelId = $tabPanel.attr('id');
+                        var tabId = panelId.replace('panel', 'tab');
+                        $('#' + tabId).addClass('responsive-tabs__list__item--active');
+
+                        //scroll to active heading only if it is below previous one
+                        var tabsPos = $('.responsive-tabs').offset().top;
+                        var newActivePos = $('.responsive-tabs__heading--active').offset().top;
+                        if (oldActivePos < newActivePos) {
+                            $('html, body').animate({ scrollTop: tabsPos }, 0).animate({ scrollTop: newActivePos }, 400);
+                        }
+
+                    }
+
+                    // if this tab panel is already active
+                    else {
+
+                        // hide panel but give it special responsive-tabs__panel--closed-accordion-only class so that it can be visible at desktop size
+                        $tabPanel.removeClass('responsive-tabs__panel--active').slideToggle(function () { $(this).addClass('responsive-tabs__panel--closed-accordion-only') });
+
+                        //remove active heading class
+                        $tabHeading.removeClass('responsive-tabs__heading--active');
+
+                        //don't alter classes on tabs as we want it active if put back to desktop size
+                    }
+
+                })
+
+                tabcount++;
+
+            })
+
+            // add finished tab list to its container
+            $tabs.prepend($tabList);
+
+            // next set of tabs on page
+            tablistcount++;
+        })
+    }
+}
+
+;(function ( $, window, document, undefined ) {
+    $.fn.dtg = function( params )
+    {
+        if( !( 'ontouchstart' in window ) &&
+            !navigator.msMaxTouchPoints &&
+            !navigator.userAgent.toLowerCase().match( /windows phone os 7/i ) ) return false;
+
+        this.each( function()
+        {
+            var curItem = false;
+
+            $( this ).on( 'click', function( e )
+            {
+                var item = $( this );
+                if( item[ 0 ] != curItem[ 0 ] )
+                {
+                    e.preventDefault();
+                    curItem = item;
+                }
+            });
+
+            $( document ).on( 'click touchstart MSPointerDown', function( e )
+            {
+                var resetItem = true,
+                    parents   = $( e.target ).parents();
+
+                for( var i = 0; i < parents.length; i++ )
+                    if( parents[ i ] == curItem[ 0 ] )
+                        resetItem = false;
+
+                if( resetItem )
+                    curItem = false;
+            });
+        });
+        return this;
+    };
+})( jQuery, window, document );
+
+;(function (e) {
+    // Handle newer versions of IE for targetting
+    if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./)) 
+        $("html").addClass("ie11");
+    if (!!navigator.userAgent.match(/MSIE 10\./)) 
+        $("html").addClass("ie10 lt-ie11");
+    if (!!navigator.userAgent.match(/MSIE 9\./)) 
+        $("html").addClass("ie9 lt-ie11 lt-ie10");
+    if (!!navigator.userAgent.match(/Gecko.*Firefox/)) 
+        $("html").addClass("firefox");
+
+    e.mtslider = function (t, n) {
+        var r = e(t);
+        r.vars = e.extend({}, e.mtslider.defaults, n);
+        var i = r.vars.namespace,
+        s = window.navigator && window.navigator.msPointerEnabled && window.MSGesture,
+        o = ("ontouchstart" in window || s || window.DocumentTouch && document instanceof DocumentTouch) && r.vars.touch,
+        u = "click touchend MSPointerUp",
+        a = "",
+        f, l = r.vars.direction === "vertical",
+        c = r.vars.reverse,
+        h = r.vars.itemWidth > 0,
+        p = r.vars.animation === "fade",
+        d = r.vars.asNavFor !== "",
+        v = {}, m = !0;
+        e.data(t, "mtslider", r);
+        v = {
+            init: function () {
+                r.animating = !1;
+                r.currentSlide = parseInt(r.vars.startAt ? r.vars.startAt : 0);
+                isNaN(r.currentSlide) && (r.currentSlide = 0);
+                r.animatingTo = r.currentSlide;
+                r.atEnd = r.currentSlide === 0 || r.currentSlide === r.last;
+                r.containerSelector = r.vars.selector.substr(0, r.vars.selector.search(" "));
+                r.slides = e(r.vars.selector, r);
+                r.container = e(r.containerSelector, r);
+                r.count = r.slides.length;
+                r.syncExists = e(r.vars.sync).length > 0;
+                r.vars.animation === "slide" && (r.vars.animation = "swing");
+                r.prop = l ? "top" : "marginLeft";
+                r.args = {};
+                r.manualPause = !1;
+                r.stopped = !1;
+                r.started = !1;
+                r.startTimeout = null;
+                r.transitions = !r.vars.video && !p && r.vars.useCSS && function () {
+                    var e = document.createElement("div"),
+                    t = ["perspectiveProperty", "WebkitPerspective", "MozPerspective", "OPerspective", "msPerspective"];
+                    for (var n in t)
+                        if (e.style[t[n]] !== undefined) {
+                            r.pfx = t[n].replace("Perspective", "").toLowerCase();
+                            r.prop = "-" + r.pfx + "-transform";
+                            return !0
+                        }
+                    return !1
+                }();
+                r.vars.controlsContainer !== "" && (r.controlsContainer = e(r.vars.controlsContainer).length > 0 && e(r.vars.controlsContainer));
+                r.vars.manualControls !== "" && (r.manualControls = e(r.vars.manualControls).length > 0 && e(r.vars.manualControls));
+                if (r.vars.randomize) {
+                    r.slides.sort(function () {
+                        return Math.round(Math.random()) - .5
+                    });
+                    r.container.empty().append(r.slides)
+                }
+                r.doMath();
+                r.setup("init");
+                r.vars.controlNav && v.controlNav.setup();
+                r.vars.directionNav && v.directionNav.setup();
+                r.vars.keyboard && (e(r.containerSelector).length === 1 || r.vars.multipleKeyboard) && e(document).bind("keyup", function (e) {
+                    var t = e.keyCode;
+                    if (!r.animating && (t === 39 || t === 37)) {
+                        var n = t === 39 ? r.getTarget("next") : t === 37 ? r.getTarget("prev") : !1;
+                        r.mtAnimate(n, r.vars.pauseOnAction)
+                    }
+                });
+                r.vars.mousewheel && r.bind("mousewheel", function (e, t, n, i) {
+                    e.preventDefault();
+                    var s = t < 0 ? r.getTarget("next") : r.getTarget("prev");
+                    r.mtAnimate(s, r.vars.pauseOnAction)
+                });
+                r.vars.pausePlay && v.pausePlay.setup();
+                r.vars.slideshow && r.vars.pauseInvisible && v.pauseInvisible.init();
+                if (r.vars.slideshow) {
+                    r.vars.pauseOnHover && r.hover(function () {
+                        !r.manualPlay && !r.manualPause && r.pause()
+                    }, function () {
+                        !r.manualPause && !r.manualPlay && !r.stopped && r.play()
+                    });
+                    if (!r.vars.pauseInvisible || !v.pauseInvisible.isHidden()) 
+                        r.vars.initDelay > 0 ? r.startTimeout = setTimeout(r.play, r.vars.initDelay) : r.play()
+                }
+                d && v.asNav.setup();
+                o && r.vars.touch && v.touch();
+                (!p || p && r.vars.smoothHeight) && e(window).bind("resize orientationchange focus", v.resize);
+                r.find("img").attr("draggable", "false");
+                setTimeout(function () {
+                    r.vars.start(r)
+                }, 200)
+            },
+            asNav: {
+                setup: function () {
+                    r.asNav = !0;
+                    r.animatingTo = Math.floor(r.currentSlide / r.move);
+                    r.currentItem = r.currentSlide;
+                    r.slides.removeClass(i + "active-slide").eq(r.currentItem).addClass(i + "active-slide");
+                    if (!s) 
+                        r.slides.click(function (t) {
+                            t.preventDefault();
+                            var n = e(this),
+                            s = n.index(),
+                            o = n.offset().left - e(r).scrollLeft();
+                            if (o <= 0 && n.hasClass(i + "active-slide")) 
+                                r.mtAnimate(r.getTarget("prev"), !0);
+                            else if (!e(r.vars.asNavFor).data("mtslider").animating && !n.hasClass(i + "active-slide")) {
+                                r.direction = r.currentItem < s ? "next" : "prev";
+                                r.mtAnimate(s, r.vars.pauseOnAction, !1, !0, !0)
+                            }
+                        });
+                    else {
+                        t._slider = r;
+                        r.slides.each(function () {
+                            var t = this;
+                            t._gesture = new MSGesture;
+                            t._gesture.target = t;
+                            t.addEventListener("MSPointerDown", function (e) {
+                                e.preventDefault();
+                                e.currentTarget._gesture && e.currentTarget._gesture.addPointer(e.pointerId)
+                            }, !1);
+                            t.addEventListener("MSGestureTap", function (t) {
+                                t.preventDefault();
+                                var n = e(this),
+                                i = n.index();
+                                if (!e(r.vars.asNavFor).data("mtslider").animating && !n.hasClass("active")) {
+                                    r.direction = r.currentItem < i ? "next" : "prev";
+                                    r.mtAnimate(i, r.vars.pauseOnAction, !1, !0, !0)
+                                }
+                            })
+                        })
+                    }
+                }
+            },
+            controlNav: {
+                setup: function () {
+                    r.manualControls ? v.controlNav.setupManual() : v.controlNav.setupPaging()
+                },
+                setupPaging: function () {
+                    var t = r.vars.controlNav === "thumbnails" ? "control-thumbs" : "control-paging",
+                    n = 1,
+                    s, o;
+                    r.controlNavScaffold = e('<ol class="' + i + "control-nav " + i + t + '"></ol>');
+                    if (r.pagingCount > 1)
+                        for (var f = 0; f < r.pagingCount; f++) {
+                            o = r.slides.eq(f);
+                            s = r.vars.controlNav === "thumbnails" ? '<img src="' + o.attr("data-thumb") + '"/>' : "<a>" + n + "</a>";
+                            if ("thumbnails" === r.vars.controlNav && !0 === r.vars.thumbCaptions) {
+                                var l = o.attr("data-thumbcaption");
+                                "" != l && undefined != l && (s += '<span class="' + i + 'caption">' + l + "</span>")
+                            }
+                            r.controlNavScaffold.append("<li>" + s + "</li>");
+                            n++
+                        }
+                    r.controlsContainer ? e(r.controlsContainer).append(r.controlNavScaffold) : r.append(r.controlNavScaffold);
+                    v.controlNav.set();
+                    v.controlNav.active();
+                    r.controlNavScaffold.delegate("a, img", u, function (t) {
+                        t.preventDefault();
+                        if (a === "" || a === t.type) {
+                            var n = e(this),
+                            s = r.controlNav.index(n);
+                            if (!n.hasClass(i + "active")) {
+                                r.direction = s > r.currentSlide ? "next" : "prev";
+                                r.mtAnimate(s, r.vars.pauseOnAction)
+                            }
+                        }
+                        a === "" && (a = t.type);
+                        v.setToClearWatchedEvent()
+                    })
+                },
+                setupManual: function () {
+                    r.controlNav = r.manualControls;
+                    v.controlNav.active();
+                    r.controlNav.bind(u, function (t) {
+                        t.preventDefault();
+                        if (a === "" || a === t.type) {
+                            var n = e(this),
+                            s = r.controlNav.index(n);
+                            if (!n.hasClass(i + "active")) {
+                                s > r.currentSlide ? r.direction = "next" : r.direction = "prev";
+                                r.mtAnimate(s, r.vars.pauseOnAction)
+                            }
+                        }
+                        a === "" && (a = t.type);
+                        v.setToClearWatchedEvent()
+                    })
+                },
+                set: function () {
+                    var t = r.vars.controlNav === "thumbnails" ? "img" : "a";
+                    r.controlNav = e("." + i + "control-nav li " + t, r.controlsContainer ? r.controlsContainer : r)
+                },
+                active: function () {
+                    r.controlNav.removeClass(i + "active").eq(r.animatingTo).addClass(i + "active")
+                },
+                update: function (t, n) {
+                    r.pagingCount > 1 && t === "add" ? r.controlNavScaffold.append(e("<li><a>" + r.count + "</a></li>")) : r.pagingCount === 1 ? r.controlNavScaffold.find("li").remove() : r.controlNav.eq(n).closest("li").remove();
+                    v.controlNav.set();
+                    r.pagingCount > 1 && r.pagingCount !== r.controlNav.length ? r.update(n, t) : v.controlNav.active()
+                }
+            },
+            directionNav: {
+                setup: function () {
+                    var t = e('<ul class="' + i + 'direction-nav"><li><a class="' + i + 'prev" href="#">' + r.vars.prevText + '</a></li><li><a class="' + i + 'next" href="#">' + r.vars.nextText + "</a></li></ul>");
+                    if (r.controlsContainer) {
+                        e(r.controlsContainer).append(t);
+                        r.directionNav = e("." + i + "direction-nav li a", r.controlsContainer)
+                    } else {
+                        r.append(t);
+                        r.directionNav = e("." + i + "direction-nav li a", r)
+                    }
+                    v.directionNav.update();
+                    r.directionNav.bind(u, function (t) {
+                        t.preventDefault();
+                        var n;
+                        if (a === "" || a === t.type) {
+                            n = e(this).hasClass(i + "next") ? r.getTarget("next") : r.getTarget("prev");
+                            r.mtAnimate(n, r.vars.pauseOnAction)
+                        }
+                        a === "" && (a = t.type);
+                        v.setToClearWatchedEvent()
+                    })
+                },
+                update: function () {
+                    var e = i + "disabled";
+                    r.pagingCount === 1 ? r.directionNav.addClass(e).attr("tabindex", "-1") : r.vars.animationLoop ? r.directionNav.removeClass(e).removeAttr("tabindex") : r.animatingTo === 0 ? r.directionNav.removeClass(e).filter("." + i + "prev").addClass(e).attr("tabindex", "-1") : r.animatingTo === r.last ? r.directionNav.removeClass(e).filter("." + i + "next").addClass(e).attr("tabindex", "-1") : r.directionNav.removeClass(e).removeAttr("tabindex")
+                }
+            },
+            pausePlay: {
+                setup: function () {
+                    var t = e('<div class="' + i + 'pauseplay"><a></a></div>');
+                    if (r.controlsContainer) {
+                        r.controlsContainer.append(t);
+                        r.pausePlay = e("." + i + "pauseplay a", r.controlsContainer)
+                    } else {
+                        r.append(t);
+                        r.pausePlay = e("." + i + "pauseplay a", r)
+                    }
+                    v.pausePlay.update(r.vars.slideshow ? i + "pause" : i + "play");
+                    r.pausePlay.bind(u, function (t) {
+                        t.preventDefault();
+                        if (a === "" || a === t.type)
+                            if (e(this).hasClass(i + "pause")) {
+                                r.manualPause = !0;
+                                r.manualPlay = !1;
+                                r.pause()
+                            } else {
+                                r.manualPause = !1;
+                                r.manualPlay = !0;
+                                r.play()
+                            }
+                        a === "" && (a = t.type);
+                        v.setToClearWatchedEvent()
+                    })
+                },
+                update: function (e) {
+                    e === "play" ? r.pausePlay.removeClass(i + "pause").addClass(i + "play").html(r.vars.playText) : r.pausePlay.removeClass(i + "play").addClass(i + "pause").html(r.vars.pauseText)
+                }
+            },
+            touch: function () {
+                var e, n, i, o, u, a, f = !1,
+                d = 0,
+                v = 0,
+                m = 0;
+                if (!s) {
+                    t.addEventListener("touchstart", g, !1);
+
+                    function g(s) {
+                        if (r.animating) 
+                            s.preventDefault();
+                        else if (window.navigator.msPointerEnabled || s.touches.length === 1) {
+                            r.pause();
+                            o = l ? r.h : r.w;
+                            a = Number(new Date);
+                            d = s.touches[0].pageX;
+                            v = s.touches[0].pageY;
+                            i = h && c && r.animatingTo === r.last ? 0 : h && c ? r.limit - (r.itemW + r.vars.itemMargin) * r.move * r.animatingTo : h && r.currentSlide === r.last ? r.limit : h ? (r.itemW + r.vars.itemMargin) * r.move * r.currentSlide : c ? (r.last - r.currentSlide + r.cloneOffset) * o : (r.currentSlide + r.cloneOffset) * o;
+                            e = l ? v : d;
+                            n = l ? d : v;
+                            t.addEventListener("touchmove", y, !1);
+                            t.addEventListener("touchend", b, !1)
+                        }
+                    }
+
+                    function y(t) {
+                        d = t.touches[0].pageX;
+                        v = t.touches[0].pageY;
+                        u = l ? e - v : e - d;
+                        f = l ? Math.abs(u) < Math.abs(d - n) : Math.abs(u) < Math.abs(v - n);
+                        var s = 500;
+                        if (!f || Number(new Date) - a > s) {
+                            t.preventDefault();
+                            if (!p && r.transitions) {
+                                r.vars.animationLoop || (u /= r.currentSlide === 0 && u < 0 || r.currentSlide === r.last && u > 0 ? Math.abs(u) / o + 2 : 1);
+                                r.setProps(i + u, "setTouch")
+                            }
+                        }
+                    }
+
+                    function b(s) {
+                        t.removeEventListener("touchmove", y, !1);
+                        if (r.animatingTo === r.currentSlide && !f && u !== null) {
+                            var l = c ? - u : u,
+                            h = l > 0 ? r.getTarget("next") : r.getTarget("prev");
+                            r.canAdvance(h) && (Number(new Date) - a < 550 && Math.abs(l) > 50 || Math.abs(l) > o / 2) ? r.mtAnimate(h, r.vars.pauseOnAction) : p || r.mtAnimate(r.currentSlide, r.vars.pauseOnAction, !0)
+                        }
+                        t.removeEventListener("touchend", b, !1);
+                        e = null;
+                        n = null;
+                        u = null;
+                        i = null
+                    }
+                } else {
+                    t.style.msTouchAction = "none";
+                    t._gesture = new MSGesture;
+                    t._gesture.target = t;
+                    t.addEventListener("MSPointerDown", w, !1);
+                    t._slider = r;
+                    t.addEventListener("MSGestureChange", E, !1);
+                    t.addEventListener("MSGestureEnd", S, !1);
+
+                    function w(e) {
+                        e.stopPropagation();
+                        if (r.animating) 
+                            e.preventDefault();
+                        else {
+                            r.pause();
+                            t._gesture.addPointer(e.pointerId);
+                            m = 0;
+                            o = l ? r.h : r.w;
+                            a = Number(new Date);
+                            i = h && c && r.animatingTo === r.last ? 0 : h && c ? r.limit - (r.itemW + r.vars.itemMargin) * r.move * r.animatingTo : h && r.currentSlide === r.last ? r.limit : h ? (r.itemW + r.vars.itemMargin) * r.move * r.currentSlide : c ? (r.last - r.currentSlide + r.cloneOffset) * o : (r.currentSlide + r.cloneOffset) * o
+                        }
+                    }
+
+                    function E(e) {
+                        e.stopPropagation();
+                        var n = e.target._slider;
+                        if (!n) 
+                            return;
+                        var r = - e.translationX,
+                        s = - e.translationY;
+                        m += l ? s : r;
+                        u = m;
+                        f = l ? Math.abs(m) < Math.abs( - r) : Math.abs(m) < Math.abs( - s);
+                        if (e.detail === e.MSGESTURE_FLAG_INERTIA) {
+                            setImmediate(function () {
+                                t._gesture.stop()
+                            });
+                            return
+                        }
+                        if (!f || Number(new Date) - a > 500) {
+                            e.preventDefault();
+                            if (!p && n.transitions) {
+                                n.vars.animationLoop || (u = m / (n.currentSlide === 0 && m < 0 || n.currentSlide === n.last && m > 0 ? Math.abs(m) / o + 2 : 1));
+                                n.setProps(i + u, "setTouch")
+                            }
+                        }
+                    }
+
+                    function S(t) {
+                        t.stopPropagation();
+                        var r = t.target._slider;
+                        if (!r) 
+                            return;
+                        if (r.animatingTo === r.currentSlide && !f && u !== null) {
+                            var s = c ? - u : u,
+                            l = s > 0 ? r.getTarget("next") : r.getTarget("prev");
+                            r.canAdvance(l) && (Number(new Date) - a < 550 && Math.abs(s) > 50 || Math.abs(s) > o / 2) ? r.mtAnimate(l, r.vars.pauseOnAction) : p || r.mtAnimate(r.currentSlide, r.vars.pauseOnAction, !0)
+                        }
+                        e = null;
+                        n = null;
+                        u = null;
+                        i = null;
+                        m = 0
+                    }
+                }
+            },
+            resize: function () {
+                if (!r.animating && r.is(":visible")) {
+                    h || r.doMath();
+                    if (p) 
+                        v.smoothHeight();
+                    else if (h) {
+                        r.slides.width(r.computedW);
+                        r.update(r.pagingCount);
+                        r.setProps()
+                    } else if (l) {
+                        r.viewport.height(r.h);
+                        r.setProps(r.h, "setTotal")
+                    } else {
+                        r.vars.smoothHeight && v.smoothHeight();
+                        r.newSlides.width(r.computedW);
+                        r.setProps(r.computedW, "setTotal")
+                    }
+                }
+            },
+            smoothHeight: function (e) {
+                if (!l || p) {
+                    var t = p ? r : r.viewport;
+                    e ? t.animate({
+                        height: r.slides.eq(r.animatingTo).height()
+                    }, e) : t.height(r.slides.eq(r.animatingTo).height())
+                }
+            },
+            sync: function (t) {
+                var n = e(r.vars.sync).data("mtslider"),
+                i = r.animatingTo;
+                switch (t) {
+                case "animate":
+                    n.mtAnimate(i, r.vars.pauseOnAction, !1, !0);
+                    break;
+                case "play":
+                    !n.playing && !n.asNav && n.play();
+                    break;
+                case "pause":
+                    n.pause()
+                }
+            },
+            pauseInvisible: {
+                visProp: null,
+                init: function () {
+                    var e = ["webkit", "moz", "ms", "o"];
+                    if ("hidden" in document) 
+                        return "hidden";
+                    for (var t = 0; t < e.length; t++) 
+                        e[t] + "Hidden" in document && (v.pauseInvisible.visProp = e[t] + "Hidden");
+                    if (v.pauseInvisible.visProp) {
+                        var n = v.pauseInvisible.visProp.replace(/[H|h]idden/, "") + "visibilitychange";
+                        document.addEventListener(n, function () {
+                            v.pauseInvisible.isHidden() ? r.startTimeout ? clearTimeout(r.startTimeout) : r.pause() : r.started ? r.play() : r.vars.initDelay > 0 ? setTimeout(r.play, r.vars.initDelay) : r.play()
+                        })
+                    }
+                },
+                isHidden: function () {
+                    return document[v.pauseInvisible.visProp] || !1
+                }
+            },
+            setToClearWatchedEvent: function () {
+                clearTimeout(f);
+                f = setTimeout(function () {
+                    a = ""
+                }, 3e3)
+            }
+        };
+        r.mtAnimate = function (t, n, s, u, a) {
+            !r.vars.animationLoop && t !== r.currentSlide && (r.direction = t > r.currentSlide ? "next" : "prev");
+            d && r.pagingCount === 1 && (r.direction = r.currentItem < t ? "next" : "prev");
+            if (!r.animating && (r.canAdvance(t, a) || s) && r.is(":visible")) {
+                if (d && u) {
+                    var f = e(r.vars.asNavFor).data("mtslider");
+                    r.atEnd = t === 0 || t === r.count - 1;
+                    f.mtAnimate(t, !0, !1, !0, a);
+                    r.direction = r.currentItem < t ? "next" : "prev";
+                    f.direction = r.direction;
+                    if (Math.ceil((t + 1) / r.visible) - 1 === r.currentSlide || t === 0) {
+                        r.currentItem = t;
+                        r.slides.removeClass(i + "active-slide").eq(t).addClass(i + "active-slide");
+                        return !1
+                    }
+                    r.currentItem = t;
+                    r.slides.removeClass(i + "active-slide").eq(t).addClass(i + "active-slide");
+                    t = Math.floor(t / r.visible)
+                }
+                r.animating = !0;
+                r.animatingTo = t;
+                n && r.pause();
+                r.vars.before(r);
+                r.syncExists && !a && v.sync("animate");
+                r.vars.controlNav && v.controlNav.active();
+                h || r.slides.removeClass(i + "active-slide").eq(t).addClass(i + "active-slide");
+                r.atEnd = t === 0 || t === r.last;
+                r.vars.directionNav && v.directionNav.update();
+                if (t === r.last) {
+                    r.vars.end(r);
+                    r.vars.animationLoop || r.pause()
+                }
+                if (!p) {
+                    var m = l ? r.slides.filter(":first").height() : r.computedW,
+                    g, y, b;
+                    if (h) {
+                        g = r.vars.itemMargin;
+                        b = (r.itemW + g) * r.move * r.animatingTo;
+                        y = b > r.limit && r.visible !== 1 ? r.limit : b
+                    } else 
+                        r.currentSlide === 0 && t === r.count - 1 && r.vars.animationLoop && r.direction !== "next" ? y = c ? (r.count + r.cloneOffset) * m : 0 : r.currentSlide === r.last && t === 0 && r.vars.animationLoop && r.direction !== "prev" ? y = c ? 0 : (r.count + 1) * m : y = c ? (r.count - 1 - t + r.cloneOffset) * m : (t + r.cloneOffset) * m;
+                    r.setProps(y, "", r.vars.animationSpeed);
+                    if (r.transitions) {
+                        if (!r.vars.animationLoop || !r.atEnd) {
+                            r.animating = !1;
+                            r.currentSlide = r.animatingTo
+                        }
+                        r.container.unbind("webkitTransitionEnd transitionend");
+                        r.container.bind("webkitTransitionEnd transitionend", function () {
+                            r.wrapup(m)
+                        })
+                    } else 
+                        r.container.animate(r.args, r.vars.animationSpeed, r.vars.easing, function () {
+                            r.wrapup(m)
+                        })
+                    } else if (!o) {
+                        r.slides.eq(r.currentSlide).css({
+                            zIndex: 1
+                        }).animate({
+                            opacity: 0
+                        }, r.vars.animationSpeed, r.vars.easing);
+                        r.slides.eq(t).css({
+                            zIndex: 2
+                        }).animate({
+                            opacity: 1
+                        }, r.vars.animationSpeed, r.vars.easing, r.wrapup)
+                    } else {
+                        r.slides.eq(r.currentSlide).css({
+                            opacity: 0,
+                            zIndex: 1
+                        });
+                        r.slides.eq(t).css({
+                            opacity: 1,
+                            zIndex: 2
+                        });
+                        r.wrapup(m)
+                    }
+                r.vars.smoothHeight && v.smoothHeight(r.vars.animationSpeed)
+            }
+        };
+        r.wrapup = function (e) {
+            !p && !h && (r.currentSlide === 0 && r.animatingTo === r.last && r.vars.animationLoop ? r.setProps(e, "jumpEnd") : r.currentSlide === r.last && r.animatingTo === 0 && r.vars.animationLoop && r.setProps(e, "jumpStart"));
+            r.animating = !1;
+            r.currentSlide = r.animatingTo;
+            r.vars.after(r)
+        };
+        r.animateSlides = function () {
+            !r.animating && m && r.mtAnimate(r.getTarget("next"))
+        };
+        r.pause = function () {
+            clearInterval(r.animatedSlides);
+            r.animatedSlides = null;
+            r.playing = !1;
+            r.vars.pausePlay && v.pausePlay.update("play");
+            r.syncExists && v.sync("pause")
+        };
+        r.play = function () {
+            r.playing && clearInterval(r.animatedSlides);
+            r.animatedSlides = r.animatedSlides || setInterval(r.animateSlides, r.vars.slideshowSpeed);
+            r.started = r.playing = !0;
+            r.vars.pausePlay && v.pausePlay.update("pause");
+            r.syncExists && v.sync("play")
+        };
+        r.stop = function () {
+            r.pause();
+            r.stopped = !0
+        };
+        r.canAdvance = function (e, t) {
+            var n = d ? r.pagingCount - 1 : r.last;
+            return t ? !0 : d && r.currentItem === r.count - 1 && e === 0 && r.direction === "prev" ? !0 : d && r.currentItem === 0 && e === r.pagingCount - 1 && r.direction !== "next" ? !1 : e === r.currentSlide && !d ? !1 : r.vars.animationLoop ? !0 : r.atEnd && r.currentSlide === 0 && e === n && r.direction !== "next" ? !1 : r.atEnd && r.currentSlide === n && e === 0 && r.direction === "next" ? !1 : !0
+        };
+        r.getTarget = function (e) {
+            r.direction = e;
+            return e === "next" ? r.currentSlide === r.last ? 0 : r.currentSlide + 1 : r.currentSlide === 0 ? r.last : r.currentSlide - 1
+        };
+        r.setProps = function (e, t, n) {
+            var i = function () {
+                var n = e ? e : (r.itemW + r.vars.itemMargin) * r.move * r.animatingTo,
+                i = function () {
+                    if (h) 
+                        return t === "setTouch" ? e : c && r.animatingTo === r.last ? 0 : c ? r.limit - (r.itemW + r.vars.itemMargin) * r.move * r.animatingTo : r.animatingTo === r.last ? r.limit : n;
+                    switch (t) {
+                    case "setTotal":
+                        return c ? (r.count - 1 - r.currentSlide + r.cloneOffset) * e : (r.currentSlide + r.cloneOffset) * e;
+                    case "setTouch":
+                        return c ? e : e;
+                    case "jumpEnd":
+                        return c ? e : r.count * e;
+                    case "jumpStart":
+                        return c ? r.count * e : e;
+                    default:
+                        return e
+                    }
+                }();
+                return i * -1 + "px"
+            }();
+            if (r.transitions) {
+                i = l ? "translate3d(0," + i + ",0)" : "translate3d(" + i + ",0,0)";
+                n = n !== undefined ? n / 1e3 + "s" : "0s";
+                r.container.css("-" + r.pfx + "-transition-duration", n)
+            }
+            r.args[r.prop] = i;
+            (r.transitions || n === undefined) && r.container.css(r.args)
+        };
+        r.setup = function (t) {
+            if (!p) {
+                var n, s;
+                if (t === "init") {
+                    r.viewport = e('<div class="' + i + 'viewport"></div>').css({
+                        overflow: "hidden",
+                        position: "relative"
+                    }).appendTo(r).append(r.container);
+                    r.cloneCount = 0;
+                    r.cloneOffset = 0;
+                    if (c) {
+                        s = e.makeArray(r.slides).reverse();
+                        r.slides = e(s);
+                        r.container.empty().append(r.slides)
+                    }
+                }
+                if (r.vars.animationLoop && !h) {
+                    r.cloneCount = 2;
+                    r.cloneOffset = 1;
+                    t !== "init" && r.container.find(".clone").remove();
+                    r.container.append(r.slides.first().clone().addClass("clone").attr("aria-hidden", "true")).prepend(r.slides.last().clone().addClass("clone").attr("aria-hidden", "true"))
+                }
+                r.newSlides = e(r.vars.selector, r);
+                n = c ? r.count - 1 - r.currentSlide + r.cloneOffset : r.currentSlide + r.cloneOffset;
+                if (l && !h) {
+                    r.container.height((r.count + r.cloneCount) * 200 + "%").css("position", "absolute").width("100%");
+                    setTimeout(function () {
+                        r.newSlides.css({
+                            display: "block"
+                        });
+                        r.doMath();
+                        r.viewport.height(r.h);
+                        r.setProps(n * r.h, "init")
+                    }, t === "init" ? 100 : 0)
+                } else {
+                    r.container.width((r.count + r.cloneCount) * 200 + "%");
+                    r.setProps(n * r.computedW, "init");
+                    setTimeout(function () {
+                        r.doMath();
+                        r.newSlides.css({
+                            width: r.computedW,
+                            "float": "left",
+                            display: "block"
+                        });
+                        r.vars.smoothHeight && v.smoothHeight()
+                    }, t === "init" ? 100 : 0)
+                }
+            } else {
+                r.slides.css({
+                    width: "100%",
+                    "float": "left",
+                    marginRight: "-100%",
+                    position: "relative"
+                });
+                t === "init" && (o ? r.slides.css({
+                    opacity: 0,
+                    display: "block",
+                    webkitTransition: "opacity " + r.vars.animationSpeed / 1e3 + "s ease",
+                    zIndex: 1
+                }).eq(r.currentSlide).css({
+                    opacity: 1,
+                    zIndex: 2
+                }) : r.slides.css({
+                    opacity: 0,
+                    display: "block",
+                    zIndex: 1
+                }).eq(r.currentSlide).css({
+                    zIndex: 2
+                }).animate({
+                    opacity: 1
+                }, r.vars.animationSpeed, r.vars.easing));
+                r.vars.smoothHeight && v.smoothHeight()
+            }
+            h || r.slides.removeClass(i + "active-slide").eq(r.currentSlide).addClass(i + "active-slide")
+        };
+        r.doMath = function () {
+            var e = r.slides.first(),
+            t = r.vars.itemMargin,
+            n = r.vars.minItems,
+            i = r.vars.maxItems;
+            r.w = r.viewport === undefined ? r.width() : r.viewport.width();
+            r.h = e.height();
+            r.boxPadding = e.outerWidth() - e.width();
+            if (h) {
+                r.itemT = r.vars.itemWidth + t;
+                r.minW = n ? n * r.itemT : r.w;
+                r.maxW = i ? i * r.itemT - t : r.w;
+                r.itemW = r.minW > r.w ? (r.w - t * (n - 1)) / n : r.maxW < r.w ? (r.w - t * (i - 1)) / i : r.vars.itemWidth > r.w ? r.w : r.vars.itemWidth;
+                r.visible = Math.floor(r.w / r.itemW);
+                r.move = r.vars.move > 0 && r.vars.move < r.visible ? r.vars.move : r.visible;
+                r.pagingCount = Math.ceil((r.count - r.visible) / r.move + 1);
+                r.last = r.pagingCount - 1;
+                r.limit = r.pagingCount === 1 ? 0 : r.vars.itemWidth > r.w ? r.itemW * (r.count - 1) + t * (r.count - 1) : (r.itemW + t) * r.count - r.w - t
+            } else {
+                r.itemW = r.w;
+                r.pagingCount = r.count;
+                r.last = r.count - 1
+            }
+            r.computedW = r.itemW - r.boxPadding
+        };
+        r.update = function (e, t) {
+            r.doMath();
+            if (!h) {
+                e < r.currentSlide ? r.currentSlide += 1 : e <= r.currentSlide && e !== 0 && (r.currentSlide -= 1);
+                r.animatingTo = r.currentSlide
+            }
+            if (r.vars.controlNav && !r.manualControls)
+                if (t === "add" && !h || r.pagingCount > r.controlNav.length) 
+                    v.controlNav.update("add");
+                else if (t === "remove" && !h || r.pagingCount < r.controlNav.length) {
+                    if (h && r.currentSlide > r.last) {
+                        r.currentSlide -= 1;
+                        r.animatingTo -= 1
+                    }
+                    v.controlNav.update("remove", r.last)
+                }
+            r.vars.directionNav && v.directionNav.update()
+        };
+        r.addSlide = function (t, n) {
+            var i = e(t);
+            r.count += 1;
+            r.last = r.count - 1;
+            l && c ? n !== undefined ? r.slides.eq(r.count - n).after(i) : r.container.prepend(i) : n !== undefined ? r.slides.eq(n).before(i) : r.container.append(i);
+            r.update(n, "add");
+            r.slides = e(r.vars.selector + ":not(.clone)", r);
+            r.setup();
+            r.vars.added(r)
+        };
+        r.removeSlide = function (t) {
+            var n = isNaN(t) ? r.slides.index(e(t)) : t;
+            r.count -= 1;
+            r.last = r.count - 1;
+            isNaN(t) ? e(t, r.slides).remove() : l && c ? r.slides.eq(r.last).remove() : r.slides.eq(t).remove();
+            r.doMath();
+            r.update(n, "remove");
+            r.slides = e(r.vars.selector + ":not(.clone)", r);
+            r.setup();
+            r.vars.removed(r)
+        };
+        v.init()
+    };
+    e(window).blur(function (e) {
+        focused = !1
+    }).focus(function (e) {
+        focused = !0
+    });
+    e.mtslider.defaults = {
+        namespace: "mt-",
+        selector: ".slides > li",
+        animation: "fade",
+        easing: "swing",
+        direction: "horizontal",
+        reverse: !1,
+        animationLoop: !0,
+        smoothHeight: !1,
+        startAt: 0,
+        slideshow: !0,
+        slideshowSpeed: 7e3,
+        animationSpeed: 600,
+        initDelay: 0,
+        randomize: !1,
+        thumbCaptions: !1,
+        pauseOnAction: !0,
+        pauseOnHover: !1,
+        pauseInvisible: !0,
+        useCSS: !0,
+        touch: !0,
+        video: !1,
+        controlNav: !0,
+        directionNav: !0,
+        prevText: "Previous",
+        nextText: "Next",
+        keyboard: !0,
+        multipleKeyboard: !1,
+        mousewheel: !1,
+        pausePlay: !1,
+        pauseText: "Pause",
+        playText: "Play",
+        controlsContainer: "",
+        manualControls: "",
+        sync: "",
+        asNavFor: "",
+        itemWidth: 0,
+        itemMargin: 0,
+        minItems: 1,
+        maxItems: 0,
+        move: 0,
+        allowOneSlide: !0,
+        start: function () {},
+        before: function () {},
+        after: function () {},
+        end: function () {},
+        added: function () {},
+        removed: function () {}
+    };
+    e.fn.mtslider = function (t) {
+        t === undefined && (t = {});
+        if (typeof t == "object") 
+            return this.each(function () {
+                var n = e(this),
+                r = t.selector ? t.selector : ".slides > li",
+                i = n.find(r);
+                if (i.length === 1 && t.allowOneSlide === !0 || i.length === 0) {
+                    i.fadeIn(400);
+                    t.start && t.start(n)
+                } else 
+                    n.data("mtslider") === undefined && new e.mtslider(this, t)
+                });
+        var n = e(this).data("mtslider");
+        switch (t) {
+        case "play":
+            n.play();
+            break;
+        case "pause":
+            n.pause();
+            break;
+        case "stop":
+            n.stop();
+            break;
+        case "next":
+            n.mtAnimate(n.getTarget("next"), !0);
+            break;
+        case "prev":
+        case "previous":
+            n.mtAnimate(n.getTarget("prev"), !0);
+            break;
+        default:
+            typeof t == "number" && n.mtAnimate(t, !0)
+        }
+    }
+})(jQuery);
+var IE7 = ($.browser.msie && (parseInt($.browser.version) == 7)) ? true : false;
+
+$(window).load(function () {
+
+    $('.slide1').mtslider({
+        animation: "slide",
+        animationLoop: false,
+        slideshow: false,
+        controlNav: false,
+        itemWidth: 200,
+        itemMargin: 5,
+        minItems: 1,
+        maxItems: 2,
+        controlsContainer: '.mtslide-container'
+    });
+
+});
+
+
+//NEW PLACEHOLDER SUPPORT FOR -IE9==========================================================//11/20/13//
+;
+(function ($) {
+    $.fn.placehold = function (placeholderClassName) {
+        var placeholderClassName = placeholderClassName || "placeholder",
+        supported = $.fn.placehold.is_supported();
+
+        function toggle() {
+            for (i = 0; i < arguments.length; i++) {
+                arguments[i].toggle();
+            }
+        }
+
+        return supported ? this : this.each(function () {
+            var $elem = $(this),
+            placeholder_attr = $elem.attr("placeholder");
+
+            if (placeholder_attr) {
+                if ($elem.val() === "" || $elem.val() == placeholder_attr) {
+                    $elem.addClass(placeholderClassName).val(placeholder_attr);
+                }
+
+                if ($elem.is(":password")) {
+                    var $pwd_shiv = $("<input />", {
+                        "class": $elem.attr("class") + " " + placeholderClassName,
+                        "value": placeholder_attr
+                    });
+
+                    $pwd_shiv.bind("focus.placehold", function () {
+                        toggle($elem, $pwd_shiv);
+                        $elem.focus();
+                    });
+
+                    $elem.bind("blur.placehold", function () {
+                        if ($elem.val() === "") {
+                            toggle($elem, $pwd_shiv);
+                        }
+                    });
+
+                    $elem.hide().after($pwd_shiv);
+                }
+
+                $elem.bind({
+                    "focus.placehold": function () {
+                        if ($elem.val() == placeholder_attr) {
+                            $elem.removeClass(placeholderClassName).val("");
+                        }
+                    },
+                    "blur.placehold": function () {
+                        if ($elem.val() === "") {
+                            $elem.addClass(placeholderClassName).val(placeholder_attr);
+                        }
+                    }
+                });
+
+                $elem.closest("form").bind("submit.placehold", function () {
+                    if ($elem.val() == placeholder_attr) {
+                        $elem.val("");
+                    }
+
+                    return true;
+                });
+            }
+        });
+    };
+
+    $.fn.placehold.is_supported = function () {
+        return "placeholder" in document.createElement("input");
+    };
+})(jQuery);
+
+$(document).ready(function(){
+    if($('a').attr('name')){
+        $(this).addClass("has-name");
+    }
+      
+});
+
+
+//NEW PLACEHOLDER SUPPORT FOR -IE9==========================================================//11/20/13//
+
+$(document).ready(function () {
+    // Datepicker
+    $('#datepicker').datepicker({
+        inline: true,
+        beforeShow: function(input, instance){
+            if ($("html").hasClass("lt-ie9") && $("header").css("position") == "fixed") {
+                instance.dpDiv.css({
+                    marginTop: (-$("header .top").height()) + 'px'
+                });
+            }
+        }
+    });
+    $("#datepicker").datepicker("option", "dayNamesMin", ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']);
+
+    $(function () {
+        $(".dp_input").datepicker({
+            inline: true,
+            buttonImageOnly: true,
+            dateFormat: 'mm/dd/yy',
+            showAnim: 'slideDown',
+            beforeShow: function(input, instance){
+                if ($("html").hasClass("lt-ie9") && $("header").css("position") == "fixed") {
+                    instance.dpDiv.css({
+                        marginTop: (-$("header .top").height()) + 'px'
+                    });
+                }
+            }
+            /*showOn: "button",
+                        buttonImage: "/assets/default/images/calendar.jpg",*/
+        });
+    });
+
+    if ($(".scfForm").length > 0) {
+        $scw.datepicker.setDefaults({
+            beforeShow: function(input, instance){
+                if ($("html").hasClass("lt-ie9") && $("header").css("position") == "fixed") {
+                    instance.dpDiv.css({
+                        marginTop: (-$("header .top").height()) + 'px'
+                    });
+                }
+            }
+        });
+    }
+
+    // Form Required Fixes for IE7
+    if ($("html").hasClass("lt-ie8") && $(".scfForm").length > 0) {
+        var $labels = $(".scfSectionContent").children("div").children("label");
+        $labels = $labels.add("span.scfCheckBoxListLabel").add("span.scfRadioButtonListLabel");
+
+        $labels.each(function (i, e) {
+            var $this = $(this),
+                $span = $this.siblings("span.scfRequired");
+                $span = $span.add($this.siblings("span.scfValidatorRequired"));
+
+            if ($span.length > 0) {
+                $this.css("color", "red");
+                $span.hide();
+            }
+        });
+    }
+});
+
+
+
+//Tooltip   
+$(document).ready(function () {
+    var targets = $('[rel~=tooltip]'),
+    target = false,
+    tooltip = false,
+    title = false;
+
+    targets.bind('mouseenter', function () {
+        target = $(this);
+        tip = target.attr('title');
+        tooltip = $('<div id="tooltip"></div>');
+
+        if (!tip || tip == '')
+            return false;
+
+        target.removeAttr('title');
+        tooltip.css('opacity', 0)
+        .html(tip)
+        .appendTo('body');
+
+        var init_tooltip = function () {
+            if ($(window).width() < tooltip.outerWidth() * 1.5)
+                tooltip.css('max-width', $(window).width() / 2);
+            else
+                tooltip.css('max-width', 340);
+
+            var pos_left = target.offset().left + (target.outerWidth() / 2) - (tooltip.outerWidth() / 2),
+            pos_top = target.offset().top - tooltip.outerHeight() - 20;
+
+            if (pos_left < 0) {
+                pos_left = target.offset().left + target.outerWidth() / 2 - 20;
+                tooltip.addClass('left');
+            } else
+                tooltip.removeClass('left');
+
+            if (pos_left + tooltip.outerWidth() > $(window).width()) {
+                pos_left = target.offset().left - tooltip.outerWidth() + target.outerWidth() / 2 + 20;
+                tooltip.addClass('right');
+            } else
+                tooltip.removeClass('right');
+
+            if (pos_top < 0) {
+                var pos_top = target.offset().top + target.outerHeight();
+                tooltip.addClass('top');
+            } else
+                tooltip.removeClass('top');
+
+            tooltip.css({
+                left: pos_left,
+                top: pos_top 
+            })
+            .animate({
+                top: '+=10',
+                opacity: 1 
+            }, 50);
+        };
+
+        init_tooltip();
+        $(window).resize(init_tooltip);
+
+        var remove_tooltip = function () {
+            tooltip.animate({
+                top: '-=10',
+                opacity: 0 
+            }, 50, function () {
+                $(this).remove();
+            });
+
+            target.attr('title', tip);
+        };
+
+        target.bind('mouseleave', remove_tooltip);
+        tooltip.bind('click', remove_tooltip);
+    });
+});
+
+
+$(document).ready(function () {
+    var $toggler = $('.toggler'),
+    $wrapper = $toggler.find('.core'),
+    $pager = $toggler.find('.pager'),
+    $content = $toggler.find('.content');
+    $IE7Top = $content.height() - 10;
+
+    $toggler.css('height', $content.height() + $pager.height());
+    IE7 ? $wrapper.css('top', $IE7Top) : $wrapper.css('top', $content.height());
+    $content.hide();
+
+    $pager.find('a').on('click', function (e) {
+        var $this = $(this),
+        $target = $($(this).attr('href')),
+        $count = 0;
+
+        if ($count === 0) {
+            $wrapper.animate({
+                'top': 0 
+            });
+            $count = 1;
+            $this.addClass('on-state');
+            //$this.parent().addClass('overlay');
+            $("<div class=\"overlay\"></div>").insertBefore($this.parent());
+            $this.parent().parent().prev().addClass('visible');
+            $this.parent().parent().parent().addClass('bg-bottom');
+        }
+        if ($target.hasClass('active')) {
+            $('.overlay').remove();
+            //$this.parent().removeClass('overlay');
+            $('.on-state').removeClass('on-state');
+            $target.parent().removeClass('bg-bottom');
+            $('.visible').removeClass('visible');
+
+            $wrapper.animate({
+                'top': $IE7Top 
+            }, function () {
+                $target.hide().removeClass('active');
+
+            });
+        } else {
+
+            $wrapper.find('.active').slideUp().removeClass('active');
+            $target.addClass('active').slideDown();
+            $('.overlay').remove();
+            //$('.overlay').removeClass('overlay');
+            $('.on-state').removeClass('on-state');
+            $("<div class=\"overlay\"></div>").insertBefore($this);
+            //$this.addClass('overlay');
+            $this.addClass('on-state');
+        }
+
+        e.preventDefault();
+    });
+
+
+});
+
+
+$(document).ready(function () {
+    $('.accordion > h3').addClass('heading');
+    $(".accordion").accordion({
+        header: ".heading",
+        collapsible: true,
+        autoHeight: false,
+        clearStyle: true 
+    });
+    $(".landing-its > section").wrapAll('<div></div>');
+    $('.landing-its').each(function() {
+        $(this).addClass('visible-desktop');
+        $(this).clone().removeClass('visible-desktop').addClass('visible-mobile').insertAfter($(this));
+    });
+
+    $('.landing-its.visible-mobile').accordion({
+        header: 'h3',
+        collapsible: true,
+        autoHeight: true,
+        active: false
+    });
+    $(".footer-mobile .accordion").accordion({
+        active: false 
+    });
+    //NEW PLACEHOLDER SUPPORT FOR -IE9==========================================================//11/20/13//
+    $("input, textarea").placehold("something-temporary");
+    //NEW PLACEHOLDER SUPPORT FOR -IE9==========================================================//11/20/13//
+    $('.lt-ie8 .scfSectionLegend').wrapInner('<span></span>');
+    $(".tabs").tabs();
+    $('.top-nav li:has(div)').dtg();
+    //console.log(Math.floor($('.top-nav li').length/2));
+    $('.top-nav > li').slice(0, 5).addClass('drop-right');
+    $('.top-nav > li').slice(5, 6).addClass('drop-center');
+    $('.append').children().clone(true).appendTo('.move');
+    $( $('.append-contact').html() ).appendTo('.contact-move');
+    $('.append-nav').children().clone(true).appendTo('.mobile-nav');
+    $('.alphalist').listnav({
+        includeNums: false,
+        includeAll: false,
+        showCounts: false
+    });
+    $('.mobile-nav ~ .search-form').insertAfter('.mobile-nav > .mobile-menu').clone().insertAfter('header .inside .tools');
+});
+
+
+$(document).ready(function () {
+    $('.mtslide').mtslider({
+        directionNav: false,
+        slideshowSpeed: 12000,
+        touch: !1,
+        slideshow: true
+    });
+});
+
+
+
+$(document).ready(function () {
+    var flag = 0;
+    $('.search').click(function () {
+        $('.mobile-menu .nav-btn').removeClass('active');
+        $(this).toggleClass('active');
+        $('.top-nav').hide();
+        $('.mobile-nav .search-form').slideToggle(400);
+        return false;
+    });
+
+    // mobile-navigation
+    //$('.top-nav li a').on('click', function(e){
+    // e.preventDefault(); // stop all hash(#) anchor links from loading
+    //});
+
+    $('.nav-btn').on('click', function (e) {
+        $('.mobile-menu .search').removeClass('active');
+        e.preventDefault();
+        $(this).toggleClass('active');
+        $('.mobile-nav .search-form').hide();
+        $('.top-nav').slideToggle(400);
+        return false;
+    });
+
+    $('.prox').click(function () {
+        $(this).toggleClass('active');
+        $('.left-nav').toggle(200);
+        return false;
+    });
+
+    $(".header-mobile").click(function () {
+        //$(".callout .inner").hide();
+        $(this).parent().children(".callout .inner").slideToggle();
+        return false;
+    });
+});
+
+$(document).ready(function () {
+    var firstTime = true;
+    $(".status").click(function () {
+        var divname = this.name;
+
+        if (this.className.indexOf('active') == -1) {
+            var selected = $('.active');
+            selected.removeClass("active");
+            $(this).addClass("active");
+        } else {
+            $(this).removeClass("active");
+        }
+    });
+});
+
+
+$(document).ready(function () {
+    var flag = 0;
+    var isiOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/);
+    if (isiOS) {
+        $('.clickme').click(function () {
+            $('.chart-content').slideToggle();
+            return false;
+        });
+
+        $('.top-nav li a').on('click touchend', function(e) {
+            var el = $(this);
+            var link = el.attr('href');
+            window.location = link;
+        });
+    } else {
+        $('.clickme').mouseenter(function () {
+            $('.chart-content').slideDown(500);
+            return false;
+        });
+    }
+    $('.inside').mouseleave(function () {
+        $('.chart-content').slideUp(500);
+        return false;
+    });
+
+});
+
+
+$(document).ready(function () {
+    RESPONSIVEUI.responsiveTabs();
+});
+
+$(document).ready(function () {
+    /*$('.mobile-slides').mtslider({
+            animation: "slide",
+            controlNav: false,
+            slideshow: false
+        });*/
+    var featureContent = $('.feature_content');
+    $('<div id=button-previous></div><div id=button-next></div>').insertBefore($('.mobile-slides'));
+    featureContent.first().addClass('active');
+    featureContent.hide();
+    $('.active').show();
+
+    $('#button-next').click(function () {
+
+        $('.active').removeClass('active').addClass('oldActive');
+        if ($('.oldActive').is(':last-child')) {
+            featureContent.first().addClass('active');
+        } else {
+            $('.oldActive').next().addClass('active');
+        }
+        $('.oldActive').removeClass('oldActive');
+        featureContent.fadeOut();
+        $('.active').fadeIn();
+
+
+    });
+
+    $('#button-previous').click(function () {
+        $('.active').removeClass('active').addClass('oldActive');
+        if ($('.oldActive').is(':first-child')) {
+            featureContent.last().addClass('active');
+        } else {
+            $('.oldActive').prev().addClass('active');
+        }
+        $('.oldActive').removeClass('oldActive');
+        featureContent.fadeOut();
+        $('.active').fadeIn();
+    });
+
+});
+
+$(document).ready(function () {
+    $("#toggle").click(function () {
+        $("#panel").slideToggle("slow");
+        $("#content").animate({
+            height: '150px',
+            bottom: '+=250'
+        }, 1000)
+    });
+
+    (function (a) {
+        a.fn.extend({
+            customSelect: function (c) {
+                if (typeof document.body.style.maxHeight === "undefined") {
+                    return this 
+                }
+                var e = {
+                    customClass: "customSelect",
+                    mapClass: true,
+                    mapStyle: true 
+                }, c = a.extend(e, c), d = c.customClass, f = function (h, k) {
+                    var g = h.find(":selected"), j = k.children(":first"), i = g.html() || "&nbsp;";
+                    j.html(i);
+                    if (g.attr("disabled")) {
+                        k.addClass(b("DisabledOption")) 
+                    } else {
+                        k.removeClass(b("DisabledOption")) 
+                    }
+                    setTimeout(function () {
+                        k.removeClass(b("Open"));
+                        a(document).off("mouseup." + b("Open")) 
+                    }, 60)
+                }, b = function (g) {
+                    return d + g 
+                };
+                return this.each(function () {
+                    var g = a(this), i = a("<span />").addClass(b("Inner")), h = a("<span />");
+                    g.after(h.append(i));
+                    h.addClass(d);
+                    if (c.mapClass) {
+                        h.addClass(g.attr("class")) 
+                    }
+                    if (c.mapStyle) {
+                        h.attr("style", g.attr("style")) 
+                    }
+                    g.addClass("hasCustomSelect").on("update", function () {
+                        f(g, h);
+                        var k = parseInt(g.outerWidth(), 10) - (parseInt(h.outerWidth(), 10) - parseInt(h.width(), 10));
+                        h.css({
+                            display: "inline-block" 
+                        });
+                        var j = h.outerHeight();
+                        if (g.attr("disabled")) {
+                            h.addClass(b("Disabled")) 
+                        } else {
+                            h.removeClass(b("Disabled")) 
+                        }
+                        i.css({
+                            width: k,
+                            display: "inline-block" 
+                        });
+                        g.css({
+                            "-webkit-appearance": "menulist-button",
+                            position: "absolute",
+                            opacity: 0,
+                            height: j,
+                            fontSize: h.css("font-size") 
+                        }) 
+                    }).on("change", function () {
+                        h.addClass(b("Changed"));
+                        f(g, h) 
+                    }).on("keyup", function (j) {
+                        if (!h.hasClass(b("Open"))) {
+                            g.blur();
+                            g.focus() 
+                        } else {
+                            if (j.which == 13 || j.which == 27) {
+                                f(g, h) 
+                            }
+                        }
+                    }).on("mousedown", function (j) {
+                        h.removeClass(b("Changed")) 
+                    }).on("mouseup", function (j) {
+                        if (!h.hasClass(b("Open"))) {
+                            if (a("." + b("Open")).not(h).length > 0 && typeof InstallTrigger !== "undefined") {
+                                g.focus() 
+                            } else {
+                                h.addClass(b("Open"));
+                                j.stopPropagation();
+                                a(document).one("mouseup." + b("Open"), function (k) {
+                                    if (k.target != g.get(0) && a.inArray(k.target, g.find("*").get()) < 0) {
+                                        g.blur() 
+                                    } else {
+                                        f(g, h) 
+                                    }
+                                }) 
+                            }
+                        }
+                    }).focus(function () {
+                        h.removeClass(b("Changed")).addClass(b("Focus")) 
+                    }).blur(function () {
+                        h.removeClass(b("Focus") + " " + b("Open")) 
+                    }).hover(function () {
+                        h.addClass(b("Hover")) 
+                    }, function () {
+                        h.removeClass(b("Hover")) 
+                    }).trigger("update") 
+                })
+            }
+        })
+    })(jQuery);
+
+    // Initialize customSelect Boxes
+    $('select.styled, select.scfDropList, select.scfPaymentMethod, .scfDateSelectorMonth, .scfDateSelectorYear, .scfDateSelectorDay, select.scfCreditCardType, select.scfCreditCardType, select.scfCreditCardType, select.scfCreditCardType, select.ddlDropListwithTextboxexample, select.ddlSendTo').customSelect();
+
+});
+
+$(window).load(function () {
+    $(".disableBox input").change(function () {
+        if ($(this).is(":checked")) {
+            $('.disableTrigger input').addClass("disable");
+            $('.disableTrigger select').addClass("disable");
+        } else {
+            $('.disableTrigger input').removeClass("disable");
+            $('.disableTrigger select').removeClass("disable");
+        }
+    });
+});
+
+/*function ResetField(field) {
+if (field.is('input:text')) {
+$(field).val('');
+} else if (field.is('select')) {
+// This is the only selection changed that worked!!
+        
+}
+}*/
+
+
+
+
+$(document).ready(function () {
+    var section = [], cc = $('div[class="content"]');
+    section.push(parseFloat(cc.css('font-size'))); // save copy-content orig. text size
+    $('p').each(function () {
+        section.push(parseFloat($(this).css('font-size')));
+    }); // save each P orig. text size
+    /* RESET EVERYTHING */
+    $(".resetFont").click(function () {
+        cc.css('font-size', section[0] + 'px');
+        $('p').each(function (i) {
+            $(this).css('font-size', section[i + 1] + 'px');
+        });
+    });
+
+
+    function fontGrow(max) {
+        cc.css('font-size', max + 'px');
+        $('p').each(function () {
+            $(this).css('font-size', max + 'px');
+        });
+    }
+    /* LITTLE STEP */
+    $(".increaseFont").click(function () {
+        fontGrow(16);
+    });
+    /* BIG STEP */
+    $(".increaseFont-more").click(function () {
+        fontGrow(18);
+    });
+    return false;
+});
+
+$(document).ready( function() {
+    // Check for IE11 and attach IE11 class to html
+    if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./)) 
+        $("html").addClass("ie11");
+    // Inject AddThis after DOM ready by appending to the body for the purposes
+    // of working around AddThis's relatively slow server and any associated blocking during initialization
+    var addthisScript = document.createElement('script');
+    addthisScript.setAttribute('src', '../s7.addthis.com/js/300/addthis_widget.js#domready=1');
+    document.body.appendChild(addthisScript);
+
+    var addthis_config = addthis_config || {};
+    addthis_config.pubid = 'ra-51f2c33a02afc4f3';
+});
+
+(function ($) {
+    $.fn.listnav = function (options) {
+        var opts = $.extend({}, $.fn.listnav.defaults, options);
+        var letters = ['_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '-'];
+        var firstClick = false;
+        opts.prefixes = $.map(opts.prefixes, function (n) {
+            return n.toLowerCase();
+        });
+
+        return this.each(function () {
+            var $wrapper, list, $list, $letters, $letterCount, id;
+            id = this.id;
+            $wrapper = $('#' + id + '-nav'); // user must abide by the convention: <ul id="myList"> for list and <div id="myList-nav"> for nav wrapper
+            $list = $(this);
+
+            var counts = {}, allCount = 0, isAll = true, numCount = 0, prevLetter = '';
+
+            function init() {
+                $wrapper.append(createLettersHtml());
+
+                $letters = $('.ln-letters', $wrapper).slice(0, 1); // will always be a single item
+                if (opts.showCounts) 
+                    $letterCount = $('.ln-letter-count', $wrapper).slice(0, 1); // will always be a single item
+
+                addClasses();
+                addNoMatchLI();
+                if (opts.flagDisabled) 
+                    addDisabledClass();
+                bindHandlers();
+
+                if (!opts.includeAll) 
+                    $list.show(); // show the list in case the recommendation for includeAll=false was taken
+
+                // remove nav items we don't need
+                //
+                if (!opts.includeAll) 
+                    $('.all', $letters).remove();
+                if (!opts.includeNums) 
+                    $('._', $letters).remove();
+                if (!opts.includeOther) 
+                    $('.-', $letters).remove();
+
+                $(':last', $letters).addClass('ln-last'); // allows for styling a case where last item needs right border set (because items before that only have top, left and bottom so that border between items isn't doubled)
+
+                if ($.cookie && (opts.cookieName != null)) {
+                    var cookieLetter = $.cookie(opts.cookieName);
+                    if (cookieLetter != null) 
+                        opts.initLetter = cookieLetter;
+                }
+
+                // decide what to show first
+                //
+                if (opts.initLetter != '') {
+                    firstClick = true;
+                    $('.' + opts.initLetter.toLowerCase(), $letters).slice(0, 1).click(); // click the initLetter if there was one
+                } else {
+                    if (opts.includeAll) 
+                        $('.all', $letters).addClass('ln-selected'); // showing all: we don't need to click this: the whole list is already loaded
+                    else {
+                        // ALL link is hidden, click the first letter that will display LI's
+                        for (var i = ((opts.includeNums) ? 0 : 1); i < letters.length; i++) {
+                            if (counts[letters[i]] > 0) {
+                                firstClick = true;
+                                $('.' + letters[i], $letters).slice(0, 1).click();
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                sortUnorderedList($("ul#alpha.alphalist, ul#blAtoZ.alphalist"));
+
+            }
+
+            // positions the letter count div above the letter links (so we only have to do it once: after this we just change it's left position via mouseover)
+            //
+            function setLetterCountTop() {
+                $letterCount.css({
+                    top: $('.a', $letters).slice(0, 1).offset({
+                        margin: false,
+                        border: true 
+                    }).top - $letterCount.outerHeight({
+                        margin: true 
+                    }) 
+                }); // note: don't set top based on '.all': it might not be visible
+            }
+
+            // adds a class to each LI that has text content inside of it (ie, inside an <a>, a <div>, nested DOM nodes, etc)
+            //
+            function addClasses() {
+                var str, firstChar, firstWord, spl, $this, hasPrefixes = (opts.prefixes.length > 0);
+                $($list).children().each(function () {
+                    $this = $(this), firstChar = '', str = $.trim($this.text()).toLowerCase();
+                    if (str != '') {
+                        if (hasPrefixes) {
+                            spl = str.split(' ');
+                            if ((spl.length > 1) && ($.inArray(spl[0], opts.prefixes) > -1)) {
+                                firstChar = spl[1].charAt(0);
+                                addLetterClass(firstChar, $this, true);
+                            }
+                        }
+                        firstChar = str.charAt(0);
+                        addLetterClass(firstChar, $this);
+                    }
+                });
+            }
+
+            function addLetterClass(firstChar, $el, isPrefix) {
+                if (/\W/.test(firstChar)) 
+                    firstChar = '-'; // not A-Z, a-z or 0-9, so considered "other"
+                if (!isNaN(firstChar)) 
+                    firstChar = '_'; // use '_' if the first char is a number
+                $el.addClass('ln-' + firstChar);
+
+                if (counts[firstChar] == undefined) 
+                    counts[firstChar] = 0;
+                counts[firstChar]++;
+                if (!isPrefix) 
+                    allCount++;
+            }
+
+            function addDisabledClass() {
+                for (var i = 0; i < letters.length; i++) {
+                    if (counts[letters[i]] == undefined) 
+                        $('.' + letters[i], $letters).addClass('ln-disabled');
+                }
+            }
+
+            function addNoMatchLI() {
+                $list.append('<li class="ln-no-match" style="display:none">' + opts.noMatchText + '</li>');
+            }
+
+            function getLetterCount(el) {
+                if ($(el).hasClass('all')) 
+                    return allCount;
+                else {
+                    var count = counts[$(el).attr('class').split(' ')[0]];
+                    return (count != undefined) ? count : 0; // some letters may not have a count in the hash
+                }
+            }
+
+            function bindHandlers() {
+
+                // sets the top position of the count div in case something above it on the page has resized
+                //
+                if (opts.showCounts) {
+                    $wrapper.mouseover(function () {
+                        setLetterCountTop();
+                    });
+                }
+
+                // mouseover for each letter: shows the count above the letter
+                //
+                if (opts.showCounts) {
+                    $('a', $letters).mouseover(function () {
+                        var left = $(this).position().left;
+                        var width = ($(this).outerWidth({
+                            margin: true 
+                        }) - 1) + 'px'; // the -1 is to tweak the width a bit due to a seeming inaccuracy in jquery ui/dimensions outerWidth (same result in FF2 and IE6/7)
+                        var count = getLetterCount(this);
+                        $letterCount.css({
+                            left: left,
+                            width: width 
+                        }).text(count).show(); // set left position and width of letter count, set count text and show it
+                    });
+
+                    // mouseout for each letter: hide the count
+                    //
+                    $('a', $letters).mouseout(function () {
+                        $letterCount.hide();
+                    });
+                }
+
+                // click handler for letters: shows/hides relevant LI's
+                //
+                $('a', $letters).click(function () {
+                    $('a.ln-selected', $letters).removeClass('ln-selected');
+
+                    var letter = $(this).attr('class').split(' ')[0];
+
+                    if (letter == 'all') {
+                        $list.children().show();
+                        $list.children('.ln-no-match').hide();
+                        isAll = true;
+                    } else {
+                        if (isAll) {
+                            $list.children().hide();
+                            isAll = false;
+                        } else if (prevLetter != '') 
+                            $list.children('.ln-' + prevLetter).hide();
+
+                        var count = getLetterCount(this);
+                        if (count > 0) {
+                            $list.children('.ln-no-match').hide(); // in case it's showing
+                            $list.children('.ln-' + letter).show();
+                        } else 
+                            $list.children('.ln-no-match').show();
+
+                        prevLetter = letter;
+                    }
+
+                    if ($.cookie && (opts.cookieName != null)) 
+                        $.cookie(opts.cookieName, letter);
+
+
+                    $(this).addClass('ln-selected');
+                    $(this).blur();
+                    if (!firstClick && (opts.onClick != null)) 
+                        opts.onClick(letter);
+                    else 
+                        firstClick = false;
+                    return false;
+                });
+            }
+
+            // creates the HTML for the letter links
+            //  
+            function createLettersHtml() {
+                var html = [];
+                for (var i = 1; i < letters.length; i++) {
+                    if (html.length == 0) 
+                        html.push('<a class="all" href="#">ALL</a><a class="_" href="#">0-9</a>');
+                    html.push('<a class="' + letters[i] + '" href="#">' + ((letters[i] == '-') ? '...' : letters[i].toUpperCase()) + '</a>');
+                }
+                return '<div class="ln-letters">' + html.join('') + '</div>' + ((opts.showCounts) ? '<div class="ln-letter-count" style="display:none; position:absolute; top:0; left:0; width:20px;">0</div>' : ''); // the styling for ln-letter-count is to give us a starting point for the element, which will be repositioned when made visible (ie, should not need to be styled by the user)
+            }
+
+            function sortUnorderedList(ul, sortDescending) {
+                if (ul.length > 0) {
+                    // Get the list items and setup an array for sorting
+                    var $lis = ul.find("li"),
+                        vals = [];
+
+                    // Populate the array
+                    $lis.each( function(index, element) {
+                        var $this = $(this);
+                        vals.push({ sort: $this.text(), html: $this });
+                    });
+
+                    // Sort it
+                    vals.sort( function(a,b) {
+                        if (a.sort > b.sort) return 1;
+                        if (a.sort < b.sort) return -1;
+                        // a must be equal to b
+                        return 0;
+                    });
+
+                    // Sometimes you gotta DESC
+                    if(sortDescending) vals.reverse();
+
+                    // Empty existing data from UL
+                    ul.empty();
+
+                    // Change the list on the page
+                    for (var i=0,l=vals.length; i<l; i++) {
+                        vals[i].html.appendTo(ul);
+                    }
+                } else return false;
+            }
+
+            init();
+        });
+    };
+
+    $.fn.listnav.defaults = {
+        initLetter: '',
+        includeAll: true,
+        incudeOther: false,
+        includeNums: true,
+        flagDisabled: true,
+        noMatchText: 'No matching entries',
+        showCounts: true,
+        cookieName: null,
+        onClick: null,
+        prefixes: []
+    };
+
+    /*RESPONSIVE TABLES PLUGIN JS========================*/
+    $(document).ready(function() {
+        var switched = false;
+        var updateTables = function() {
+            if (($(window).width() < 767) && !switched ) {
+                switched = true;
+                $("table.responsive-table").each(function(i, element) {
+                    splitTable($(element));
+                });
+                return true;
+            } else if (switched && ($(window).width() > 767)) {
+                switched = false;
+                $("table.responsive-table").each(function(i, element) {
+                    unsplitTable($(element));
+                });
+            }
+        };
+
+        $(window).load(updateTables);
+        $(window).bind("resize", updateTables);
+
+
+        function splitTable(original)
+        {
+            original.wrap("<div class='table-wrapper' />");
+
+            var copy = original.clone();
+            copy.find("td:not(:first-child), th:not(:first-child)").css("display", "none");
+            copy.removeClass("responsive-table");
+
+            original.closest(".table-wrapper").append(copy);
+            copy.wrap("<div class='pinned' />");
+            original.wrap("<div class='scrollable' />");
+        }
+
+        function unsplitTable(original) {
+            original.closest(".table-wrapper").find(".pinned").remove();
+            original.unwrap();
+            original.unwrap();
+        }
+
+        //$(".responsive-tabs__list li").append("<span class='carrot'></span>"); //IE7 carrot workaround
+
+        // Handle newer versions of IE for targetting
+        if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./)) 
+            $("html").addClass("ie11");
+        if (!!navigator.userAgent.match(/MSIE 10\./)) 
+            $("html").addClass("ie10 lt-ie11");
+        if (!!navigator.userAgent.match(/MSIE 9\./)) 
+            $("html").addClass("ie9 lt-ie11 lt-ie10");
+    });
+})(jQuery);
+
+$(function () {
+    /* Responsive images */
+    var $img = $(".copy").find("img");
+
+    $img.each( function (i, el) {
+        var $this = $(this),
+            width = $this.width();
+
+        if (width > 160) $this.addClass("responsive-image");
+    });
+
+    /* Wistia Responsive Fixes */
+    $("a[class^='wistia-popover'] > img").addClass("wistia-responsive");
+
+    /* Wistia Responsive Videos for Touch Devices 
+    var wistia = $("a[class^='wistia-popover']");
+
+    if (wistia.length > 0 && $("html").hasClass("touch")) {
+        wistia.each(function (i, el) {
+            var $this = $(this),
+                s = document.createElement("script");
+            if ($this.children("img").length > 0 && $this.parents(".footer-block").length === 0) {
+                $this.replaceWith('<div class="wistia-iframe-wrap"><iframe src="' + $this.attr("href").replace("?popover=true", "") + '?controlsVisibleOnLoad=0" allowtransparency="true" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" width="540" height="304"></iframe></div>');
+                s.type = "text/javascript";
+                s.src = "//fast.wistia.com/static/embed_shepherd-v1.js";
+                $("head").append(s);
+                wistiaEmbeds.onFind(function(video) {
+                    video.videoFoam(true);
+                });
+            }
+        });
+    }
+    */
+});
