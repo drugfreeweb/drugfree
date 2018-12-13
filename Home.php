@@ -72,7 +72,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                         <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="services.html">Services</a>
+                        <a class="nav-link" href="services.html"><?php echo $lang[$default]['DISTRICT']?></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
