@@ -75,13 +75,13 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                         <a class="nav-link" href="services.html"><?php echo $lang[$default]['DISTRICT']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Support</a>
+                        <a class="nav-link" href="contact.html"><?php echo $lang[$default]['RESOURCES']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">blog</a>
+                        <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
                     </li>
                 </ul>
             </div>
@@ -96,7 +96,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                 <h1 data-aos="fade-up" data-aos-delay="100"><?php echo $lang[$default]['PRESIDENTIAL_TASK']?></h1>
                 <h2 data-aos="fade-up" data-aos-delay="300">the multipurpose psd wordrpess theme</h2>
                 <h4 data-aos="fade-up" data-aos-delay="500">Getup and rise, for the new chapter of your life</h4>
-                <p data-aos="fade-up" data-aos-delay="700"><a href="about.html" class="btn btn-success">Get Started</a></p>
+                <p data-aos="fade-up" data-aos-delay="700"><a href="about.html" class="btn btn-success">Be Volunteers</a></p>
             </div>
             <!--container-fluid end-->
         </div>

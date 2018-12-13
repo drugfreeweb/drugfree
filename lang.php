@@ -8,7 +8,10 @@ $lang=array(
 		'ORGANIZATION'=>'ORGANIZATION STRUCTURE',
 		'DISTRICT'=>'DISTRICT',
 		'PRESIDENTIAL_TASK'=>'PRESIDENTIAL TASK FORCE ON DRUG PREVENTION',
-		
+		'EVENTS'=>'EVENTS',
+		'RESOURCES'=>'RESOURCES',
+		'CONTACT'=>'CONTACT US',
+		 
 	),
 	'si'=>array(
 		'Home'=> 'මුල් පිටුව ',
@@ -17,7 +20,9 @@ $lang=array(
 		'ORGANIZATION'=>'කාර්ය මණ්ඩල සැලැස්ම',
 		'DISTRICT'=>'දිස්ත්‍රික්කය',
 		'PRESIDENTIAL_TASK'=>' මත් ද්‍රව්‍ය නිවාරණ ජනාධිපති කාර්ය සාධක බලකාය ',
-		
+		'EVENTS'=>'සිදුවීම්',
+		'RESOURCES'=>'සම්පත්',
+		'CONTACT'=>'අමතන්න',
 	),
 	'tm'=>array(
 		'Home'=> 'முகப்பு ',
@@ -26,6 +31,9 @@ $lang=array(
 		'ORGANIZATION'=>'ஒரகனிழடிஒன்',
 		'DISTRICT'=>'மாவட்டம்',
 		'PRESIDENTIAL_TASK'=>'மருந்து தடுப்பு ஜனாதிபதி செயலணியின்',
+		'EVENTS'=>'எவேன்த்ஸ்',
+		'RESOURCES'=>'ரெசௌர்cஎச்',
+		'CONTACT'=>'காண்டக்ட்',
 	)
 	)
 ?>
