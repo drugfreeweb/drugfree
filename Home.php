@@ -89,8 +89,11 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"><?php echo $lang[$default]['RESOURCES']?></a>
                     </li>
-                    <li class="nav-item">
+                   <!-- <li class="nav-item">
                         <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
+                    </li> -->
+					<li class="nav-item">
+                        <a class="nav-link" href="login.php?lang=en"><?php echo $lang[$default]['Login']?></a>
                     </li>
 
                 </ul>

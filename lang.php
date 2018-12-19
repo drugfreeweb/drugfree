@@ -11,6 +11,7 @@ $lang=array(
 		'EVENTS'=>'EVENTS',
 		'RESOURCES'=>'RESOURCES',
 		'CONTACT'=>'CONTACT US',
+		'Login'=>'Login',
 		 
 	),
 	'si'=>array(
@@ -23,6 +24,7 @@ $lang=array(
 		'EVENTS'=>'සිදුවීම්',
 		'RESOURCES'=>'සම්පත්',
 		'CONTACT'=>'අමතන්න',
+		'Login'=>'ඇතුල් වන්න',
 	),
 	'tm'=>array(
 		'Home'=> 'முகப்பு ',
@@ -34,6 +36,7 @@ $lang=array(
 		'EVENTS'=>'எவேன்த்ஸ்',
 		'RESOURCES'=>'ரெசௌர்cஎச்',
 		'CONTACT'=>'காண்டக்ட்',
+		'Login'=>'உள் நுழை',
 	)
 	)
 ?>
