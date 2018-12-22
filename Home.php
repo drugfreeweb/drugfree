@@ -29,7 +29,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
 </head>
 
 <body  >
-    <header class="header bg" style="background-color:#0066ff;" > <!-- hedaer backgroud changer-->
+    <header class="header bg" style="background-color:#0EC9F7;" > <!-- hedaer backgroud changer-->
         <div class="container text-white" >
             <div class="row"  >
                 <div class="col-sm-4 align-self-center text-left">
