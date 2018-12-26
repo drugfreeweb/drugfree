@@ -67,21 +67,20 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
                         <a class="nav-link active" href="index.php"><?php echo $lang[$default]['Home']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html"><?php echo $lang[$default]['About']?></a>
+                        <a class="nav-link" href="about.php"><?php echo $lang[$default]['About']?></a>
                     </li>
                     <li class="nav-item">
+                      <div class="dropdown">
                         <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
+                        <div class="dropdown-content" style="min-width:120px;" >
+            							<a href="#"><?php echo $lang[$default]['STAFF']?></a>
+            							<a href="#"><?php echo $lang[$default]['COMMITTE']?></a>
+            						</div>
+                      </div>
                     </li>
                     <li class="nav-item" >
-					<div class="dropdown">
-                        <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['DISTRICT']?></a>
+                        <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['GALLERY']?></a>
 
-						<div class="dropdown-content" style="min-width:120px;" >
-							<a href="#">Link 1</a>
-							<a href="#">Link 2</a>
-							<a href="#">Link 3</a>
-						</div>
-					</div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
@@ -108,7 +107,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
             <div class="container-fluid content">
                 <h1 data-aos="fade-up" data-aos-delay="100"><?php echo $lang[$default]['PRESIDENTIAL_TASK']?></h1>
 
-                <p data-aos="fade-up" data-aos-delay="700"><a href="beVol.html" class="btn btn-success">Be Volunteers</a></p>
+                <p data-aos="fade-up" data-aos-delay="700"><a href="beVol.html" class="btn btn-success"><?php echo $lang[$default]['Be a Volunteer']?></a></p>
             </div>
             <!--container-fluid end-->
         </div>

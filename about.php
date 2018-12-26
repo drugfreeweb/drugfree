@@ -1,3 +1,13 @@
+<?php
+
+
+  include('lang.php');
+
+$default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
+
+
+
+ ?>
 <!doctype html>
 <html lang="en">
 
@@ -16,15 +26,10 @@
 
     <title>more</title>
     <style>
-        .jumbotron {
-            width: 100%;
-            height: 250px;
-        }
-
-        .jumbotron h2 {
-            padding-bottom: 0;
-        }
+    .jumbotron {width: 100%;height: 150px;}
+        .jumbotron h2 {padding-bottom: 0;}
     </style>
+
 </head>
 
 <body>
@@ -34,9 +39,9 @@
               <div class="col-sm-4 align-self-center text-left">
                   <h6>
         <ul class="line" >
-        <li><a href="Home.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
-        <li><a href="Home.php?lang=si" class="lang_color">සිංහල  |</a></li>
-        <li><a href="Home.php?lang=tm" class="lang_color">தமிழ்</a></li>
+        <li><a href="about.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
+        <li><a href="about.php?lang=si" class="lang_color">සිංහල  |</a></li>
+        <li><a href="about.php?lang=tm" class="lang_color">தமிழ்</a></li>
         </ul>
       </h6>
               </div>
@@ -104,110 +109,77 @@
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Welcome to more.</h1>
-                <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2>
+                <h1 data-aos="fade-right" data-aos-delay="300"><?php echo $lang[$default]['Our Vission']?></h1>
+                <h1 data-aos="fade-left" data-aos-delay="300"><?php echo $lang[$default]['& Mission']?></h2>
             </div>
             <!--container-fluid end-->
         </div>
     </section>
 
-    <!-- blog-single Section Start -->
-    <div id="blog-single">
+    <!-- About Section Start -->
+    <div id="about-us">
         <div class="container">
-            <div class="row">
-                <div class="col-sm-12 col-12 heading-1">
-                    <h3>Read Blog</h3>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="container">
-            <div class="row" data-aos="fade-up" data-aos-duration="700">
-                <div class="col-sm-12">
-                    <img src="images/index.jpg" alt="" class="img-thumbnail image">
-                    <div class="heading">
-                        <h2>Beautiful girl holding her camera in neck for a photo shoot for fist time</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="social-buttons" data-aos="fade-up" data-aos-duration="700">
-                <div class="row">
-                    <div class="col-sm-5 col-md-6">
-                        <div class="inner-text">
-                            <h3>December 23, 2016 Posted by <span>Bizzy</span> In : <span><a href="#">Fashion</a></span></h3>
-                        </div>
-                    </div>
-                    <div class="col-sm-7 col-md-6">
-                        <ul class="mbm_social">
-                            <li><a class="social-facebook" href="#">
-            		<i class="fa fa-facebook"><small>1.2m</small></i>
+           <h3>Vision</h3>
+            <div class="row" style="margin-right: 0; margin-left: 0;" data-aos="fade-up" data-aos-delay="300">
+                <div>
+                 <!--<img src="images/about.jpg" alt="about-bg" class="thumbnail image">!-->
+                  <p>To achieve the backdrop to economic, social and cultural development in Sri Lanka according to His Excellency the Presidents Policy Statement “Maithri Palanayak, Stavara Ratak” to build a Sri Lanka Free of Dangerous Drugs.
 
-            		<div class="tooltip"><span>facebook</span></div>
-            		</a>
-                            </li>
-                            <li><a class="social-twitter" href="#">
-            		<i class="fa fa-twitter"><small>448.6k</small></i>
-            		<div class="tooltip"><span>Twitter</span></div>
-            		</a>
-                            </li>
-                            <li><a class="social-google-plus" href="#">
-            		<i class="fa fa-pinterest" aria-hidden="true"><small>111.7k</small></i>
-            		<div class="tooltip"><span>google+</span></div>
-            		</a>
-                            </li>
-                        </ul>
-                    </div>
+                   </p>
                 </div>
-            </div>
-            <div class="row" data-aos="fade-up" data-aos-duration="700">
-                <div class="col-sm-12 col-lg-12 box">
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i have been to so <a href="blog_single.html">many beautiful</a> places and met interesting people around the world, this website is my mirror of life. </p>
-                    <p>Welcome nal travel blog, i love to travel the globe, i have been to so many beautiful Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interes Welcom y personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interesting people around the world, this website is my mirror of life. </p>
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i </p>
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interesting people around the world, this website is my mirror of life. </p>
-                    <p>Welcome nal travel blog, i love to travel the globe, i have been to so <a href="blog_single.html">many beautiful</a> Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interes Welcom y personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interesting people around the world, this website is my mirror of life. </p>
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful...e world, this website is my mirror of life. </p>
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interesting people around the world, this website is my mirror of life.</p>
-                    <p>Welcome nal travel blog, i love to travel the globe, i have been to so <a href="blog_single.html">many beautiful</a> Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interes Welcom y personal travel blog, i love to travel the globe, i have been to so many beautiful places and met interesting people around the world, this website is my mirror of life. </p>
-                    <p>Welcome to my personal travel blog, i love to travel the globe, i have been to so many beautiful...e world, this website is my mirror of life. </p>
-                </div>
-            </div>
-            <section class="section4 more-blog" data-aos="fade-up" data-aos-duration="700">
-                <h2 class="background"><span>Similar Posts</span></h2>
-                <div class="container">
-                    <div class="row" data-aos="fade-up" data-aos-duration="700">
-                        <div class="card-deck">
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-2.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Photography</a>
-                                    <p class="card-text"><small class="text-muted">January 24th 2017</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Beautiful girl dancing wearing beach wear for photoshoot!</a></p>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-3.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Photography</a>
-                                    <p class="card-text"><small class="text-muted">January 24th 2017</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Beautiful girl dancing wearing beach wear for photoshoot!</a></p>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <img class="card-img-top" src="images/portfolio-5.jpg" alt="Card image cap">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="blog.html" role="button">Photography</a>
-                                    <p class="card-text"><small class="text-muted">January 24th 2017</small></p>
-                                    <p class="card-text"><a href="blog_single.html">Beautiful girl dancing wearing beach wear for photoshoot!</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+             </div>
+             <hr>
+             <h3>Mision</h3>
+              <div class="row" style="margin-right: 0; margin-left: 0;" data-aos="fade-up" data-aos-delay="300">
+                  <div>
+                   <!--<img src="images/about.jpg" alt="about-bg" class="thumbnail image">!-->
+                    <p>
+To gradually reduce the use of Alcohol,
+Tobacco and other illegal drugs and thereby
+reduce the negative consequences of using the
+aforementioned substances to the health of Sri
+Lankans which will in turn improve the people’s wellbeing, improve productivity and reduce poverty.<br><br>
+
+Objectives<br><br>
+
+To decrease the usage, transport and sale of Illegal Drugs by 80%
+by the year 2020 in comparison to year 2014.<br>
+To Decrease the Individual usage of Alcohol by 25% by
+2020 in comparison to 2014 To decrease the usage of tobacco
+products by at least 50% by the Year 2020 in comparison to year 2014.<br>
+To stop newcomers from starting the usage of drugs.<br>
+To minimalize the hazardous and harmful behaviors of current users.<br>
+To minimalize the number of road accidents caused by alcohol usage by at
+least 50% in the year 2020 in comparison to the year 2014.<br>
+To completely end the direct and indirect publicity of tobacco
+and alcohol as well as to end corporate social responsibility programs of those respective organizations.<br>
+To protect the rights of non-users affected by users in the work place,
+at home and in the public and also to reduce the harm caused by which so
+that a healthy environment can be developed for nonusers.<br>
+To develop a social environment where peer pressure
+towards individuals to consume alcohol for the first time or increasing the usage of alcohol.<br>
+To protect the rights of non smokers, specially by passive smoking
+caused by smokers, and also to develop a healthy environment which is not polluted by tobacco smoke.<br>
+
+To reduce the number of victims being admitted to hospitals due to effects of direct or indirect usage of drugs.<br>
+To reduce the abundances of Tobacco and Alcohol products.<br>
+To efficiently and correctly educate the public regarding direct and indirect harm caused by Drugs.<br><br>
+
+Action Plan<br><br>
+In order to implement the “Mathin Nidahas Ratak” program
+and its steps in reducing the demand of Drugs and the supply of the same,
+focus will be on three important points. There will be special importance placed on
+the factor of demand of drugs.<br><br>
+1)	Compilation of Laws and Policies, implementation<br>
+2)	Treatment and Rehabilitation<br>
+3)	Prevention<br>
+
+                     </p>
+                  </div>
+               </div>
         </div>
     </div>
-    <!-- Blog_single Section End -->
+    <!-- About Section End -->
 
     <section class="section-7">
         <!-- Footer -->

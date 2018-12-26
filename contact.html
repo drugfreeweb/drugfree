@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/main.css">
+    <link  rel="stylesheet" href="css/style_2.css" />
 
     <title>more</title>
     <style>
@@ -21,62 +22,77 @@
 </head>
 
 <body>
-    <header class="header bg">
-        <div class="container text-white">
-            <div class="row">
-                <div class="col-sm-4 align-self-center text-left">
-                    <h6>Estd 1905</h6>
-                </div>
-                <div class="col-sm-4 col-12 align-self-center box-1 text-center">
-                    <a class="navbar-brand" href="index.html"><img src="images/header-logo.png" alt="logo"></a>
-                </div>
-                <div class="col-sm-4 align-self-center text-right">
-                    <div class="social-icons">
-                        <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+  <header class="header bg" style="background-color:#0EC9F7;" > <!-- hedaer backgroud changer-->
+      <div class="container text-white" >
+          <div class="row"  >
+              <div class="col-sm-4 align-self-center text-left">
+                  <h6>
+        <ul class="line" >
+        <li><a href="Home.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
+        <li><a href="Home.php?lang=si" class="lang_color">සිංහල  |</a></li>
+        <li><a href="Home.php?lang=tm" class="lang_color">தமிழ்</a></li>
+        </ul>
+      </h6>
+              </div>
+              <div class="col-sm-4 col-12 align-self-center box-1 text-center">
+                  <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"></a>
+              </div>
+              <div class="col-sm-4 align-self-center text-right">
+                  <div class="social-icons">
+                      <a class="navbar-brand" href="index.html"><img src="images/lk.png" alt="logo"></a>
+
+                  </div>
+              </div>
+          </div>
+          <!--/row-->
+      </div>
+      <!--container-->
+  </header>
+  <span class="position-absolute trigger"><!-- hidden trigger to apply 'stuck' styles --></span>
+  <nav class="navbar navbar-expand-sm sticky-top navbar-dark">
+      <div class="container">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar1">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+          <div class="collapse navbar-collapse" id="navbar1">
+              <ul class="navbar-nav">
+                  <li class="nav-item active">
+                      <a class="nav-link active" href="index.php"><?php echo $lang[$default]['Home']?></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="about.html"><?php echo $lang[$default]['About']?></a>
+                  </li>
+                  <li class="nav-item">
+                    <div class="dropdown">
+                      <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
+                      <div class="dropdown-content" style="min-width:120px;" >
+                        <a href="#"><?php echo $lang[$default]['STAFF']?></a>
+                        <a href="#"><?php echo $lang[$default]['COMMITTE']?></a>
+                      </div>
                     </div>
-                </div>
-            </div>
-            <!--/row-->
-        </div>
-        <!--container-->
-    </header>
-    <span class="position-absolute trigger"><!-- hidden trigger to apply 'stuck' styles --></span>
-    <nav class="navbar navbar-expand-sm sticky-top navbar-dark">
-        <div class="container">
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar1">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-            <div class="collapse navbar-collapse" id="navbar1">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="portfolio.html">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="services.html">Services</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Support</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog.html">blog</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!--container end-->
-    </nav>
+                  </li>
+                  <li class="nav-item" >
+                      <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['GALLERY']?></a>
+
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="contact.html"><?php echo $lang[$default]['RESOURCES']?></a>
+                  </li>
+                 <!-- <li class="nav-item">
+                      <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
+                  </li> -->
+        <li class="nav-item">
+                      <a class="nav-link" href="login.php?lang=en"><?php echo $lang[$default]['Login']?></a>
+                  </li>
+
+              </ul>
+          </div>
+      </div>
+      <!--container end-->
+  </nav>
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
