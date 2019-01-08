@@ -1,5 +1,14 @@
-<!doctype html>
-<html lang="en">
+<?php
+
+
+  include('lang.php');
+
+$default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
+
+
+
+ ?>
+<html >
 
 <head>
     <!-- Required meta tags -->
@@ -12,8 +21,11 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/main.css">
-    <link  rel="stylesheet" href="css/style_2.css" />
-
+    <link href='simplelightbox-master/dist/simplelightbox.min.css' rel='stylesheet' type='text/css'>
+    <script src='jquery-3.0.0.js' type='text/javascript'></script>
+    <script type="text/javascript" src="simplelightbox-master/dist/simple-lightbox.js"></script>
+    	<link  rel="stylesheet" href="css/style_2.css" />
+    <link href='style_gel.css' rel='stylesheet' type='text/css'>
     <title>more</title>
     <style>
     .jumbotron {width: 100%;height: 250px;}
@@ -28,9 +40,9 @@
               <div class="col-sm-4 align-self-center text-left">
                   <h6>
         <ul class="line" >
-        <li><a href="Home.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
-        <li><a href="Home.php?lang=si" class="lang_color">සිංහල  |</a></li>
-        <li><a href="Home.php?lang=tm" class="lang_color">தமிழ்</a></li>
+        <li><a href="galley.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
+        <li><a href="galley.php?lang=si" class="lang_color">සිංහල  |</a></li>
+        <li><a href="galley.php?lang=tm" class="lang_color">தமிழ்</a></li>
         </ul>
       </h6>
               </div>
@@ -63,23 +75,24 @@
                       <a class="nav-link" href="about.html"><?php echo $lang[$default]['About']?></a>
                   </li>
                   <li class="nav-item">
-                    <div class="dropdown">
                       <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
-                      <div class="dropdown-content" style="min-width:120px;" >
-                        <a href="#"><?php echo $lang[$default]['STAFF']?></a>
-                        <a href="#"><?php echo $lang[$default]['COMMITTE']?></a>
-                      </div>
-                    </div>
                   </li>
                   <li class="nav-item" >
-                      <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['GALLERY']?></a>
+        <div class="dropdown">
+                      <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['DISTRICT']?></a>
 
+          <div class="dropdown-content" style="min-width:120px;" >
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </div>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="contact.html"><?php echo $lang[$default]['RESOURCES']?></a>
+                      <a class="nav-link" href="galley.php"><?php echo $lang[$default]['gallery']?></a>
                   </li>
                  <!-- <li class="nav-item">
                       <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
@@ -98,8 +111,8 @@
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Welcome to more.</h1>
-                <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2>
+                <h1 data-aos="fade-right" data-aos-delay="300">Gallery</h1>
+                <!-- <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2> -->
             </div>
             <!--container-fluid end-->
         </div>
@@ -107,39 +120,74 @@
 
 <!-- Contact section Start -->
 <div id="contact">
-  <div class="container">
-  <h3>Contact Us</h3>
-  <div class="row" data-aos="fade-up" data-aos-delay="300">
-      <div class="col-md-12 text-left">
-          <p>Lorem Ipsum is simply dummy text of the printing and scrambled it to make a type specimen book. It has survived not only fiveLorem Ipsum is simply dummy text of the printing and scrambled it to make a type specimen book. It has survived not only fiveLorem Ipsum is simply dummy text of the printing and scrambled it to make a type specimen book. I</p>
-      </div>
-  </div>
-    </div>
-     <div class="container py-5">
-      <div class="row" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-md-12">
-              <form>
-                  <div class="form-group row">
-                      <div class="col-sm-6">
-                          <input type="text" class="form-control" placeholder="Your Name" required>
-                      </div>
-                          <div class="col-sm-6">
-                          <input type="text" class="form-control" placeholder="Your Email" required>
-                      </div>
-                      <div class="col-sm-12">
-                          <input type="number" class="form-control" placeholder="Your Phont Number" required>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <div class="col-xs-12 col-md-12">
-                          <textarea type="text" class="form-control" placeholder="Your Message" rows="6" required></textarea>
-                      </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Alright Submit it</button>
-              </form>
-          </div>
-      </div>
-     </div>
+  <div class='container'>
+             <div class="gallery">
+
+             <?php
+             // Image extensions
+             $image_extensions = array("png","jpg","jpeg","gif");
+
+             // Target directory
+             $dir = 'gallery/';
+             if (is_dir($dir)){
+
+                 if ($dh = opendir($dir)){
+                     $count = 1;
+
+                     // Read files
+                     while (($file = readdir($dh)) !== false){
+
+                         if($file != '' && $file != '.' && $file != '..'){
+
+                             // Thumbnail image path
+                             $thumbnail_path = "images/thumbnail/".$file;
+
+                             // Image path
+                             $image_path = "images/".$file;
+
+                             $thumbnail_ext = pathinfo($thumbnail_path, PATHINFO_EXTENSION);
+                             $image_ext = pathinfo($image_path, PATHINFO_EXTENSION);
+
+                             // Check its not folder and it is image file
+                             if(!is_dir($image_path) &&
+                                 in_array($thumbnail_ext,$image_extensions) &&
+                                 in_array($image_ext,$image_extensions)){
+                                 ?>
+
+                                 <!-- Image -->
+                                 <a href="<?php echo $image_path; ?>">
+                                     <img src="<?php echo $thumbnail_path; ?>" alt="" title=""/>
+                                 </a>
+                                 <!-- --- -->
+                                 <?php
+
+                                 // Break
+                                 if( $count%4 == 0){
+                                 ?>
+                                     <div class="clear"></div>
+                                 <?php
+                                 }
+                                 $count++;
+                             }
+                         }
+
+                     }
+                     closedir($dh);
+                 }
+             }
+             ?>
+             </div>
+         </div>
+
+
+         <!-- Script -->
+         <script type='text/javascript'>
+         $(document).ready(function(){
+
+             // Intialize gallery
+             var gallery = $('.gallery a').simpleLightbox();
+         });
+         </script>
 </div>
 
 <!-- Contact section Ended -->

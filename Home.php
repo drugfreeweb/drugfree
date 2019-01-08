@@ -1,11 +1,11 @@
 <?php
-
+session_start();
 
   include('lang.php');
 
 $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
-
-
+$selang= $_GET['lang'];
+$_SESSION['lang']=$selang;
 
  ?>
 
@@ -64,29 +64,30 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
             <div class="collapse navbar-collapse" id="navbar1">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link active" href="index.php"><?php echo $lang[$default]['Home']?></a>
+                        <a class="nav-link active" href="home.php?lang=<?php echo $default?> "><?php echo $lang[$default]['Home']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.php"><?php echo $lang[$default]['About']?></a>
+                        <a class="nav-link" href="about.html"><?php echo $lang[$default]['About']?></a>
                     </li>
                     <li class="nav-item">
-                      <div class="dropdown">
                         <a class="nav-link" href="portfolio.html"><?php echo $lang[$default]['ORGANIZATION']?></a>
-                        <div class="dropdown-content" style="min-width:120px;" >
-            							<a href="#"><?php echo $lang[$default]['STAFF']?></a>
-            							<a href="#"><?php echo $lang[$default]['COMMITTE']?></a>
-            						</div>
-                      </div>
                     </li>
                     <li class="nav-item" >
-                        <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['GALLERY']?></a>
+					<div class="dropdown">
+                        <a class="nav-link" href="services.html"  class="dropdown" ><?php echo $lang[$default]['DISTRICT']?></a>
 
+						<div class="dropdown-content" style="min-width:120px;" >
+							<a href="#">Link 1</a>
+							<a href="#">Link 2</a>
+							<a href="#">Link 3</a>
+						</div>
+					</div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html"><?php echo $lang[$default]['EVENTS']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html"><?php echo $lang[$default]['RESOURCES']?></a>
+                        <a class="nav-link" href="galley.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['gallery']?></a>
                     </li>
                    <!-- <li class="nav-item">
                         <a class="nav-link" href="blog.html"><?php echo $lang[$default]['CONTACT']?></a>
@@ -107,7 +108,7 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
             <div class="container-fluid content">
                 <h1 data-aos="fade-up" data-aos-delay="100"><?php echo $lang[$default]['PRESIDENTIAL_TASK']?></h1>
 
-                <p data-aos="fade-up" data-aos-delay="700"><a href="beVol.html" class="btn btn-success"><?php echo $lang[$default]['Be a Volunteer']?></a></p>
+                <p data-aos="fade-up" data-aos-delay="700"><a href="beVol.html" class="btn btn-success">Be Volunteers</a></p>
             </div>
             <!--container-fluid end-->
         </div>
