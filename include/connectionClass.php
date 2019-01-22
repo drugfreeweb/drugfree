@@ -7,4 +7,5 @@ class connectionClass extends mysqli{
         $this->con=  $this->connect($this->host, $this->username, $this->password, $this->dbName);
     }
 }
+
 ?>

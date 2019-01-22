@@ -7,6 +7,12 @@ $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
 $selang= $_GET['lang'];
 $_SESSION['lang']=$selang;
 
+
+
+include_once 'include/galleryClass.php';
+$galleryClass=new galleryClass();
+
+$news=$galleryClass->news();
  ?>
 
 <html >
@@ -99,8 +105,30 @@ $_SESSION['lang']=$selang;
                 </ul>
             </div>
         </div>
+		   </nav>
+		 <div class="container">
+				<?php
+                    if(count($news)){
+                        foreach ($news as $value) {
+							if('en'==$_SESSION['lang']){
+                            echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[english]</marquee> ";
+							}
+							elseif('si'==$_SESSION['lang'])
+							{
+                            echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[sinhala]</marquee> ";
+							}
+							else
+							{
+                            echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[tamil]</marquee> ";
+							}
+                        }
+                    }
+                  ?>
+				
+				
+		 </div>
         <!--container end-->
-    </nav>
+ 
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
