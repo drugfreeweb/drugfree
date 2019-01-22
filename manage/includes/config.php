@@ -1,5 +1,5 @@
 <?php 
-$conn=mysqli_connect("localhost","root","","drugs")or die("Can't Connect...");
+$conn=mysqli_connect("localhost","root","","phptutorial")or die("Can't Connect...");
 ?>
 
 	

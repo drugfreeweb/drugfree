@@ -189,7 +189,7 @@ $albumid=$_SESSION['AlbumId'];
                   <?php
                     if(count($listAlbum)){
                         foreach ($listAlbum as $value) {
-							$_SESSION['AlbumId']=$value[AlbumId];
+							$_SESSION['AlbumId']=$value['AlbumId'];
                             echo "<tr><td><img src='../galleryImage/$value[ImageName]' width='50px' height='50px'></td><td>$value[AlbumId]</td> ";
 							echo "
 							<td><form  method='post'>

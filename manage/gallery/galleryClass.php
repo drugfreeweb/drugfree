@@ -87,5 +87,42 @@ class galleryClass extends connectionClass{
 		$result=$this->query($select);
         
     }
+	
+	
+	
+	  public function news($tsin,$ttam,$teng,$sin,$tam,$eng){
+        $insert="INSERT INTO `news` (`sinhala`, `english`, `tamil`, `sin`, `eng`, `tm`, `img`) VALUES ('$tsin', '$teng', '$ttam', '$sin', '$tam', '$eng', '$eng' )";
+        $result=$this->query($insert);
+        if($result){
+            echo "news created";
+        }
+        else
+        {
+            echo "news not created";
+        }
+    }
+	
+	
+	
+	  public function newslist(){
+        $select="select   * from  news  ORDER BY nid DESC  ";
+        $result=$this->query($select);
+        $count=$result->num_rows;
+		
+        if($count< 1){
+            
+        }
+        else
+        {
+			 
+			 
+            while ($row = $result->fetch_array()) {
+			
+                $rows[]=$row;
+				
+            }
+            return  $rows;
+        }
+    }
     
 }
