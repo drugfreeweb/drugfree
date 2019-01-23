@@ -87,5 +87,85 @@ class galleryClass extends connectionClass{
 		$result=$this->query($select);
         
     }
+	
+<<<<<<< HEAD
+	public function deletenews($albumname){
+		echo $albumname;
+		
+        $select="DELETE FROM  news  WHERE 	nid=' ". $albumname. " ' ";
+		$result=$this->query($select);
+        
+    }
+	
+	
+	
+	
+	  public function news($tsin,$ttam,$teng,$sin,$tam,$eng,$img){
+		
+        $insert="INSERT INTO `news` (`sinhala`, `english`, `tamil`, `sin`, `eng`, `tm`, `img`) VALUES ('$tsin', '$teng', '$ttam', '$sin', '$eng', '$tam', '$img' )";
+=======
+	
+	
+	  public function news($tsin,$ttam,$teng,$sin,$tam,$eng){
+        $insert="INSERT INTO `news` (`sinhala`, `english`, `tamil`, `sin`, `eng`, `tm`, `img`) VALUES ('$tsin', '$teng', '$ttam', '$sin', '$tam', '$eng', '$eng' )";
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
+        $result=$this->query($insert);
+        if($result){
+            echo "news created";
+        }
+        else
+        {
+            echo "news not created";
+        }
+    }
+	
+	
+	
+	  public function newslist(){
+        $select="select   * from  news  ORDER BY nid DESC  ";
+        $result=$this->query($select);
+        $count=$result->num_rows;
+		
+        if($count< 1){
+            
+        }
+        else
+        {
+			 
+			 
+            while ($row = $result->fetch_array()) {
+			
+                $rows[]=$row;
+				
+            }
+            return  $rows;
+        }
+    }
+<<<<<<< HEAD
+	
+	
+	public function news1(){
+        $select="select   * from  news  ORDER BY nid DESC ";
+        $result=$this->query($select);
+        $count=$result->num_rows;
+		
+        if($count< 1){
+            
+        }
+        else
+        {
+			 
+			 
+            while ($row = $result->fetch_array()) {
+			
+                $rows[]=$row;
+				
+            }
+            return  $rows;
+        }
+    }
+	
+=======
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
     
 }

@@ -1,4 +1,62 @@
-<!doctype html>
+<?php
+
+  include('lang.php');
+
+$default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
+$selang= $_GET['lang'];
+$_SESSION['lang']=$selang;
+
+
+
+
+include_once('phplib/db_config.php');
+
+
+
+
+
+
+ if(isset($_POST['log_user'])) {
+	
+      // username and password sent from form 
+      $email    = "";
+     
+      $myusername1 = mysqli_real_escape_string($con, $_POST['name']);
+		$mypassword = mysqli_real_escape_string($con, $_POST['password']);
+		
+
+      $sql = "SELECT Username,Password FROM login WHERE Username = '$myusername1' and password = '$mypassword'";
+     
+      
+	  $result=mysqli_query($con, $sql);	
+        $count=$result->num_rows;
+        if($count< 1){
+            
+        }
+        else
+        {
+			
+             header("location: manage/index.html");
+				
+         
+						
+			}
+	  
+	  
+	  
+	
+   }
+   
+include_once 'include/galleryClass.php';
+$galleryClass=new galleryClass();
+
+$news=$galleryClass->news();  
+         ?>
+
+
+ 
+ 
+ 
 <html lang="en">
 
 <head>
@@ -10,32 +68,34 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/main.css">
+	<link  rel="stylesheet" href="css/style_2.css" />
 
-    <title>more</title>
-    <style>
-    .jumbotron {width: 100%;height: 250px;}
-        .jumbotron h2 {padding-bottom: 0;}
-    </style>
+    <title><?php echo $lang[$default]['Free country from drugs']?></title>
 </head>
 
-<body>
-    <header class="header bg">
-        <div class="container text-white">
-            <div class="row">
+<body  >
+    <header class="header bg" style="background-color:#0EC9F7;" > <!-- hedaer backgroud changer-->
+        <div class="container text-white" >
+            <div class="row"  >
                 <div class="col-sm-4 align-self-center text-left">
-                    <h6>Estd 1905</h6>
+                    <h6>
+					<ul class="line" >
+					<li><a href="Home.php?lang=en" style="color:#e6f0ff;" >  English |</a></li>
+					<li><a href="Home.php?lang=si" class="lang_color">සිංහල  |</a></li>
+					<li><a href="Home.php?lang=tm" class="lang_color">தமிழ்</a></li>
+					</ul>
+				</h6>
                 </div>
                 <div class="col-sm-4 col-12 align-self-center box-1 text-center">
-                    <a class="navbar-brand" href="index.html"><img src="images/header-logo.png" alt="logo"></a>
+                    <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="logo"></a>
                 </div>
                 <div class="col-sm-4 align-self-center text-right">
                     <div class="social-icons">
-                        <a href="#"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                        <a class="navbar-brand" href="index.html"><img src="images/lk.png" alt="logo"></a>
+
                     </div>
                 </div>
             </div>
@@ -51,38 +111,85 @@
         </button>
             <div class="collapse navbar-collapse" id="navbar1">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="portfolio.html">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="services.html">Services</a>
-                    </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="contact.html">Contact</a>
+                        <a class="nav-link active" href="home.php?lang=<?php echo $default?> "><?php echo $lang[$default]['Home']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Support</a>
+                        <a class="nav-link" href="about.php?lang=<?php echo $selang?> "><?php echo $lang[$default]['About']?></a>
+                    </li>
+                     <li class="nav-item">
+                    <div class="dropdown">
+                      <a class="nav-link" href=""><?php echo $lang[$default]['ORGANIZATION']?></a>
+                      <div class="dropdown-content" style="min-width:120px;" >
+                        <a href="saff.php?lang=<?php echo $selang?> "><?php echo $lang[$default]['STAFF']?></a>
+                        <a href="COmmite.php?lang=<?php echo $selang?> "><?php echo $lang[$default]['COMMITTE']?></a>
+                      </div>
+                    </div>
+                  </li>
+					
+					 <li class="nav-item">
+                        <a class="nav-link" href="news.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['News']?></a>
+                    </li>
+					
+					
+                  
+					 <li class="nav-item">
+                        <a class="nav-link" href="contact.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['CONTACT']?></a>
+                    </li>
+					
+					
+                   
+                    <li class="nav-item">
+                        <a class="nav-link" href="event.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['EVENTS']?></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="blog.html">blog</a>
+                        <a class="nav-link" href="galley.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['gallery']?></a>
                     </li>
+                   
+					<li class="nav-item">
+                        <a class="nav-link" href="login.php?lang=<?php echo $selang?>"><?php echo $lang[$default]['Login']?></a>
+                    </li>
+
                 </ul>
             </div>
         </div>
-        <!--container end-->
-    </nav>
+		   </nav>
+		    <div class="container">
+				
+				<?php
+				$rows="";
+                    if(count($news)){
+                        foreach ($news as $value) {
+							if('en'==$_SESSION['lang']){
+								 $rows=$rows.$value['english'];
+                           // echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[english]</marquee> ";
+							}
+							elseif('si'==$_SESSION['lang'])
+							{
+								$rows=$rows." ✰  ".$value['sinhala'];
+                           // echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[sinhala]</marquee> ";
+							}
+							else
+							{
+								$rows=$rows.$value['tamil'];
+                           // echo "    <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$value[tamil]</marquee> ";
+							}
+                        }
+                    }
+                  ?>
+				  <?php 
+				  
+	 echo "   <font size=\"3\" color=\"blue\">  <marquee behavior=\"scroll\" direction=\"left\" scrollamount=\"3\">$rows</marquee></h6> ";
+
+				  
+	?>
+			  </div>
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Be A Volunteers</h1>
+                <h1 data-aos="fade-right" data-aos-delay="300">Event</h1>
 
             </div>
             <!--container-fluid end-->
@@ -91,93 +198,10 @@
 
 <!-- Contact section Start -->
 <div id="contact">
-  <div class="container">
-  <h3>Register</h3>
-  <div class="row" data-aos="fade-up" data-aos-delay="300">
-      <div class="col-md-12 text-left">
-          <p>Please fill this form to be a volunteer</p>
-      </div>
-  </div>
-    </div>
-     <div class="container py-5">
-      <div class="row" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-md-12">
-              <form>
-                  <div class="form-group row">
-                    Your Name:
-                      <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your Name" required>
-                      </div>
-                      Your Address:
-                          <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your Address" required>
-                      </div>
-                      Your Age:
-                      <div class="col-sm-12">
-                          <input type="number" class="form-control" placeholder="Your Age" required>
-                      </div>
-                      Your Birthday:
-                      <div class="col-sm-12">
-                          <input type="date" class="form-control" placeholder="Your Date" required>
-                      </div>
-                      Your District:
-                          <div class="col-sm-12">
-                            <select name="cars">
-                              <option value="Ampara">Ampara</option>
-                              <option value="Anuradhapura">Anuradhapura</option>
-                              <option value="Badulla">Badulla</option>
-                              <option value="Batticaloa">Batticaloa</option>
-                              <option value="Colombo">Colombo</option>
-                              <option value="Galle">Galle</option>
-                              <option value="Gampaha">Gampaha</option>
-                              <option value="Hambantota">Hambantota</option>
-                              <option value="Jaffna">Jaffna</option>
-                              <option value="Kalutara">Kalutara</option>
-                              <option value="Kandy">Kandy</option>
-                              <option value="Kegalle">Kegalle</option>
-                              <option value="Kilinochchi">Kilinochchi</option>
-                              <option value="Kurunegala">Kurunegala</option>
-                              <option value="Mannar">Mannar</option>
-                              <option value="Matale">Matale</option>
-                              <option value="Matara">Matara</option>
-                              <option value="Monaragala">Monaragala</option>
-                              <option value="Mullaitivu">Mullaitivu</option>
-                              <option value="Nuwara Eliya">Nuwara Eliya</option>
-                              <option value="Polonnaruwa">Polonnaruwa</option>
-                              <option value="Puttalam">Puttalam</option>
-                              <option value="Ratnapura">Ratnapura</option>
-                              <option value="Trincomalee">Trincomalee</option>
-                              <option value="Vavuniya">Vavuniya</option>
-                            </select>
-                      </div>
-                      Your Divisional Secretariat:
-                          <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your Divisional Secretariat" required>
-                      </div>
-                      Your Telephone number:
-                          <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your Telephone number" required>
-                      </div>
-                      Your Email Address:
-                          <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your Email Address" required>
-                      </div>
-                      Your National Identity Car Number:
-                          <div class="col-sm-12">
-                          <input type="text" class="form-control" placeholder="Your National Identity Car Number" required>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                    Your Educational Qualifications:
-                      <div class="col-xs-12 col-md-12">
-                          <textarea type="text" class="form-control" placeholder="Your Educational Qualifications" rows="6" required></textarea>
-                      </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Be A volunteer</button>
-              </form>
-          </div>
-      </div>
-     </div>
+ 
+	
+	 
+     
 </div>
 
 <!-- Contact section Ended -->

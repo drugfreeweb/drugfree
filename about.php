@@ -1,15 +1,14 @@
 <?php
+session_start();
 
-  include('lang.php');
+ include('lang.php');
 
 $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
-$selang= $_GET['lang'];
-$_SESSION['lang']=$selang;
 
 
 
 
-include_once('phplib/db_config.php');
+$selang=$_GET['lang'];
 
 include_once 'include/galleryClass.php';
 $galleryClass=new galleryClass();
@@ -18,49 +17,16 @@ $news=$galleryClass->news();
 
 
 
-
- if(isset($_POST['log_user'])) {
-	
-      // username and password sent from form 
-      $email    = "";
-     
-      $myusername1 = mysqli_real_escape_string($con, $_POST['name']);
-		$mypassword = mysqli_real_escape_string($con, $_POST['password']);
-		
-
-      $sql = "SELECT Username,Password FROM login WHERE Username = '$myusername1' and password = '$mypassword'";
-     
-      
-	  $result=mysqli_query($con, $sql);	
-        $count=$result->num_rows;
-        if($count< 1){
-            
-        }
-        else
-        {
-			
-             header("location: manage/index.html");
-				
-         
-						
-			}
-	  
-	  
-	  
-	
-   }
-   
-  
-         ?>
+$_SESSION['lang']=$default;
 
 
- 
- 
- 
+
+ ?>
+
 <html lang="en">
 
 <head>
-   <!-- Required meta tags -->
+       <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -186,59 +152,83 @@ $news=$galleryClass->news();
 
 				  
 	?>
-			  </div>	  </div>
+			  </div>
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Volunteers</h1>
-
+                <h1 data-aos="fade-right" data-aos-delay="300">Welcome to more.</h1>
+                <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2>
             </div>
             <!--container-fluid end-->
         </div>
     </section>
 
-<!-- Contact section Start -->
-<div id="contact">
-  <div class="container">
-  <h3>Login</h3>
-  <div class="row" data-aos="fade-up" data-aos-delay="300">
-      <div class="col-md-12 text-left">
-          <p>Please User name and password</p>
-      </div>
-  </div>
+    <!-- About Section Start -->
+    <div id="about-us">
+        <div class="container">
+           <h3>Vision</h3>
+            <div class="row" style="margin-right: 0; margin-left: 0;" data-aos="fade-up" data-aos-delay="300">
+                <div>
+                 <!--<img src="images/about.jpg" alt="about-bg" class="thumbnail image">!-->
+                  <p>To achieve the backdrop to economic, social and cultural development in Sri Lanka according to His Excellency the Presidents Policy Statement “Maithri Palanayak, Stavara Ratak” to build a Sri Lanka Free of Dangerous Drugs.
+
+                   </p>
+                </div>
+             </div>
+             <hr>
+             <h3>Mision</h3>
+              <div class="row" style="margin-right: 0; margin-left: 0;" data-aos="fade-up" data-aos-delay="300">
+                  <div>
+                   <!--<img src="images/about.jpg" alt="about-bg" class="thumbnail image">!-->
+                    <p>
+To gradually reduce the use of Alcohol,
+Tobacco and other illegal drugs and thereby
+reduce the negative consequences of using the
+aforementioned substances to the health of Sri
+Lankans which will in turn improve the people’s wellbeing, improve productivity and reduce poverty.<br><br>
+
+Objectives<br><br>
+
+To decrease the usage, transport and sale of Illegal Drugs by 80%
+by the year 2020 in comparison to year 2014.<br>
+To Decrease the Individual usage of Alcohol by 25% by
+2020 in comparison to 2014 To decrease the usage of tobacco
+products by at least 50% by the Year 2020 in comparison to year 2014.<br>
+To stop newcomers from starting the usage of drugs.<br>
+To minimalize the hazardous and harmful behaviors of current users.<br>
+To minimalize the number of road accidents caused by alcohol usage by at
+least 50% in the year 2020 in comparison to the year 2014.<br>
+To completely end the direct and indirect publicity of tobacco
+and alcohol as well as to end corporate social responsibility programs of those respective organizations.<br>
+To protect the rights of non-users affected by users in the work place,
+at home and in the public and also to reduce the harm caused by which so
+that a healthy environment can be developed for nonusers.<br>
+To develop a social environment where peer pressure
+towards individuals to consume alcohol for the first time or increasing the usage of alcohol.<br>
+To protect the rights of non smokers, specially by passive smoking
+caused by smokers, and also to develop a healthy environment which is not polluted by tobacco smoke.<br>
+
+To reduce the number of victims being admitted to hospitals due to effects of direct or indirect usage of drugs.<br>
+To reduce the abundances of Tobacco and Alcohol products.<br>
+To efficiently and correctly educate the public regarding direct and indirect harm caused by Drugs.<br><br>
+
+Action Plan<br><br>
+In order to implement the “Mathin Nidahas Ratak” program
+and its steps in reducing the demand of Drugs and the supply of the same,
+focus will be on three important points. There will be special importance placed on
+the factor of demand of drugs.<br><br>
+1)	Compilation of Laws and Policies, implementation<br>
+2)	Treatment and Rehabilitation<br>
+3)	Prevention<br>
+
+                     </p>
+                  </div>
+               </div>
+        </div>
     </div>
-      <div class="container py-5">
-      <div class="row" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-md-12">
-              <form method="post">
-                  <div class="form-group row">
-                    User Name:
-                      <div class="col-sm-12">
-                          <input type="text" class="form-control" name="name" placeholder="User Name" required>
-                      </div>
-                     
-                      
-                  </div>
-                  <div class="form-group row">
-                    Password:
-                      <div class="col-xs-12 col-md-12">
-                          <input type="text" class="form-control" name="password" placeholder="Password" rows="6" required></input>
-                      </div>
-                  </div>
-                   <input type="submit" value="Login" name="log_user" class="form-control btn btn-primary">
-              </form>
-          </div>
-      </div>
-     </div>
-
-	
-	 
-     
-</div>
-
-<!-- Contact section Ended -->
+    <!-- About Section End -->
 
     <section class="section-7">
         <!-- Footer -->

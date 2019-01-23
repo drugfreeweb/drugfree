@@ -1,4 +1,118 @@
-﻿<!DOCTYPE html>
+﻿
+<?php session_start();
+require('includes/config.php');
+include_once './inc/header.php';
+include_once './counting/countClass.php';
+
+
+
+
+include_once './gallery/galleryClass.php';
+$galleryClass=new galleryClass();
+<<<<<<< HEAD
+$newslist=$galleryClass->newslist();
+
+
+
+
+if(isset($_POST["submit"])){
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+    $getImage=  basename($_FILES["Image"]["name"]);
+    if($getImage==""){
+        echo "Please choose";
+	
+		
+    }
+    else
+    {
+		
+				$tsi=$_POST['tsi'];
+=======
+
+if(isset($_POST["submit"])){
+				
+   
+		$tsi=$_POST['tsi'];
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
+			$ttm=$_POST['ttm'];
+				$teng=$_POST['teng'];
+					$si=$_POST['si'];
+						$tm=$_POST['tm'];
+							$eng=$_POST['eng'];
+<<<<<<< HEAD
+        $target="../news/";
+        $ran=time();
+        $target=$target.$ran.$getImage;
+        $imageName=$ran.$getImage;
+        
+        if($_FILES["Image"]["type"]=="image/jpg"||$_FILES["Image"]["type"]=="image/jpeg"){
+            move_uploaded_file($_FILES["Image"]["tmp_name"], $target);
+            if(move_uploaded_file){
+                $galleryClass->news($tsi,$ttm,$teng,$si,$tm,$eng,$imageName);
+					include_once './index.html';
+            }
+            else
+            {
+                echo "File is not uploaded";
+            }
+        }
+        else
+        {
+            echo "Please choose Image";
+        }
+    }
+}
+
+if(isset($_POST["select"])){
+	
+$nid=$_SESSION['nid'];
+	
+	$galleryClass->deletenews($nid);
+	include_once './index.html';
+	
+	
+=======
+			 $galleryClass->news($tsi,$ttm,$teng,$si,$tm,$eng);				
+       
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
+}
+
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
       <meta charset="utf-8" />
@@ -82,79 +196,114 @@
           <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>BASIC UI ELEMENTS</h2>
+                        <h2>News Management</h2>
                     </div>
                 </div>
                 <!-- /. ROW  -->
                 <hr />
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                        <h5>Input Examples Set</h5>
+<<<<<<< HEAD
+	   <form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>" enctype="multipart/form-data">
+             
+=======
+	<form method="post" >
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
+                        <h5>News Topic</h5>
                        <div class="input-group">
-  <span class="input-group-addon">@</span>
-  <input type="text" class="form-control" placeholder="Username" />
+  <span class="input-group-addon">Header Sinhala</span>
+  <input type="text" class="form-control" name="tsi" placeholder="Enter " />
+  </div>
+  
+  <div class="input-group">
+  
+  <span class="input-group-addon">Header English</span>
+  <input type="text" class="form-control"  name="ttm" placeholder="Enter" />
+  </div>
+  
+  <div class="input-group">
+  <span class="input-group-addon">Header Tamil</span>
+  <input type="text" class="form-control"  name="teng" placeholder="Enter" />
 </div>
 <br />
-<div class="input-group">
-  <input type="text" class="form-control" />
-  <span class="input-group-addon">.00</span>
 
-</div>
 <br />
-<div class="input-group">
-  <span class="input-group-addon">$</span>
-  <input type="text" class="form-control" />
-  <span class="input-group-addon">.00</span>
-</div>
+
                     </div>
                    
                     <div class="col-lg-6 col-md-6">
-                        <h5>Buttons Samples</h5>
-                        <a href="#" class="btn btn-default">default</a>
-                        <a href="#" class="btn btn-primary">primary</a>
-                        <a href="#" class="btn btn-danger">danger</a>
-                        <a href="#" class="btn btn-success">success</a>
-                        <a href="#" class="btn btn-info">info</a>
-                        <a href="#" class="btn btn-warning">warning</a>
+                        <h5>News Details</h5>
+                       <div class="input-group">
+  <span class="input-group-addon">Header Tamil</span>
+  <input type="text" class="form-control"   name="si"placeholder="Enter" />
+</div>
+
+                        <div class="input-group">
+  <span class="input-group-addon">Header Tamil</span>
+  <input type="text" class="form-control"  name="tm" placeholder="Enter" />
+</div>
+
+                        <div class="input-group">
+  <span class="input-group-addon">Header Tamil</span>
+  <input type="text" class="form-control"  name="eng" placeholder="Enter" />
+</div>
+
+  <div class="form-group">
+                  <label>Choose Image</label>
+                  <input type="file" name="Image" id="Image" value="" class="form-control">
+              </div>
+			  
+                      
+                        <button id="submit" name="submit" type="Submit" class="btn btn-primary">Upload Image</button>
+					   
+		</form>			   
+					   
+					   
+					   
+					   
+					   
+					   
+					   
+					   
+					   
                         <br>
                         <br>
-                        <h5>Progressbar Samples</h5>
-                        <div class="progress progress-striped">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                <span class="sr-only">40% Complete (success)</span>
-                            </div>
-                        </div>
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                <span class="sr-only">20% Complete</span>
-                            </div>
-                        </div>
 
-
-                    </div>
 
                 </div>
                 <!-- /. ROW  -->
                 <hr>
-                <div class="row">
-                    <div class="col-lg-4 col-md-4">
-                        <div class="form-group">
-                            <label>Text Input Example</label>
-                            <input class="form-control" />
-                            <p class="help-block">Help text here.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        <label>Click to see blank page</label>
-                        <a href="blank.html" target="_blank" class="btn btn-danger btn-lg btn-block">BLANK PAGE</a>
-                    </div>
-                    <div class="col-lg-4 col-md-4">
-                        For More Examples Please visit official bootstrap website <a href="http://getbootstrap.com" target="_blank">getbootstrap.com</a>
-                    </div>
-                </div>
+              
                 <hr>
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
+<<<<<<< HEAD
+                        <h5>News Tabele</h5>
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                  
+                                    <th>ID</th>
+                                    <th>Sinhala</th>
+                                    <th>Tamil</th>
+									<th>English</th>\
+									<th>Opthion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                  <?php
+                    if(count($newslist)){
+                        foreach ($newslist as $value)
+						{		$_SESSION['nid']=$value['nid'];
+                            echo "<tr><td>$value[nid]</td><td>$value[sinhala]</td><td>$value[english]</td><td>$value[tamil]</td><td>  <form  method='post'>
+												<input type='submit' name='select' value='Delete' > </form>	
+												
+												</td>   </tr>";
+                        }
+                    }                 
+                  ?>
+                               
+=======
                         <h5>Table  Sample One</h5>
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
@@ -190,10 +339,18 @@
                                     <td>the Bird</td>
                                     <td>@twitter</td>
                                 </tr>
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
                             </tbody>
                         </table>
 
                     </div>
+<<<<<<< HEAD
+                   
+                
+                <!-- /. ROW  -->
+                <hr />
+          
+=======
                     <div class="col-lg-6 col-md-6">
                         <h5>Table  Sample Two</h5>
                         <div class="table-responsive">
@@ -352,6 +509,7 @@
 
                     </div>
                 </div>
+>>>>>>> 25bf30b2a8f77778851430a5c38a0608002c038e
                 <!-- /. ROW  -->
 
             </div>

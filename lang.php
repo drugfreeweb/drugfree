@@ -12,7 +12,7 @@ $lang=array(
 		'gallery'=>'Gallery',
 		'CONTACT'=>'CONTACT US',
 		'Login'=>'Login',
-
+		'News'=>'News',
 	),
 	'si'=>array(
 		'Home'=> 'මුල් පිටුව ',
@@ -25,6 +25,7 @@ $lang=array(
 		'gallery'=>'පින්තුර ',
 		'CONTACT'=>'අමතන්න',
 		'Login'=>'ඇතුල් වන්න',
+		'News'=>'පුවත්',
 	),
 	'tm'=>array(
 		'Home'=> 'முகப்பு ',
@@ -37,6 +38,7 @@ $lang=array(
 		'gallery'=>'கேலரி',
 		'CONTACT'=>'காண்டக்ட்',
 		'Login'=>'உள் நுழை',
+		'News'=>'செய்தி',
 	)
 	)
 ?>

@@ -25,6 +25,28 @@ class galleryClass extends connectionClass{
     }
 	
 	
+	
+	  public function newslist(){
+        $select="select   * from  news  ORDER BY nid DESC  ";
+        $result=$this->query($select);
+        $count=$result->num_rows;
+		
+        if($count< 1){
+            
+        }
+        else
+        {
+			 
+			 
+            while ($row = $result->fetch_array()) {
+			
+                $rows[]=$row;
+				
+            }
+            return  $rows;
+        }
+	
+	  }
 
     
 }

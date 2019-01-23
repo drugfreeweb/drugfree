@@ -1,4 +1,5 @@
 <?php
+session_start();
 
   include('lang.php');
 
@@ -7,60 +8,22 @@ $selang= $_GET['lang'];
 $_SESSION['lang']=$selang;
 
 
-
-
-include_once('phplib/db_config.php');
-
 include_once 'include/galleryClass.php';
 $galleryClass=new galleryClass();
-
 $news=$galleryClass->news();
-
-
-
-
- if(isset($_POST['log_user'])) {
-	
-      // username and password sent from form 
-      $email    = "";
-     
-      $myusername1 = mysqli_real_escape_string($con, $_POST['name']);
-		$mypassword = mysqli_real_escape_string($con, $_POST['password']);
-		
-
-      $sql = "SELECT Username,Password FROM login WHERE Username = '$myusername1' and password = '$mypassword'";
-     
-      
-	  $result=mysqli_query($con, $sql);	
-        $count=$result->num_rows;
-        if($count< 1){
-            
-        }
-        else
-        {
-			
-             header("location: manage/index.html");
-				
-         
-						
-			}
-	  
-	  
-	  
-	
-   }
-   
-  
-         ?>
-
-
- 
- 
- 
+$newslist=$galleryClass->newslist();
+?>
 <html lang="en">
-
+<style>
+#c{
+  height: 50%;
+  width: 50%;
+  object-fit: contain;
+}
+</style>
 <head>
-   <!-- Required meta tags -->
+   
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -186,59 +149,91 @@ $news=$galleryClass->news();
 
 				  
 	?>
-			  </div>	  </div>
+			  </div>
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Volunteers</h1>
-
+                <h1 data-aos="fade-right" data-aos-delay="300">News</h1>
+                
             </div>
             <!--container-fluid end-->
         </div>
     </section>
 
-<!-- Contact section Start -->
-<div id="contact">
-  <div class="container">
-  <h3>Login</h3>
-  <div class="row" data-aos="fade-up" data-aos-delay="300">
-      <div class="col-md-12 text-left">
-          <p>Please User name and password</p>
-      </div>
-  </div>
-    </div>
-      <div class="container py-5">
-      <div class="row" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-md-12">
-              <form method="post">
-                  <div class="form-group row">
-                    User Name:
-                      <div class="col-sm-12">
-                          <input type="text" class="form-control" name="name" placeholder="User Name" required>
-                      </div>
-                     
+    <!--Services-->
+    <section class="services">
+        <div class="container">
+          
+            <div class="row">
+                <div class="col-sm-12 col-12 box-1"  data-aos="fade-up" data-aos-delay="300">
+                    <div class="row box">
+                        <div class="col-sm-1 col-12">
+                            <i class="fa fa-desktop" aria-hidden="true"></i>
+                        </div>
+						<?php
+                    if(count($newslist)){
+                        foreach ($newslist as $value)
+						{		$_SESSION['nid']=$value['nid'];
+                           
+									$imgname=$value['img'];
+									
+						
+								//	$filepath ='news/'.$imgname;
+							
+						 echo " <div class=\"col-sm-11 col-12\">
+                            <h3>$value[english]</a></h3>
+                            <p></p>
+							 <div class=\"col-sm-6 col-12 box-2\">
+                            <figure class=\"figure\">
+					
+                               <a href=\"blog.html\"><img src=news/$imgname  class=\"figure-img img-fluid\" height=\"150\"  width=\"200\"  alt=\"blog\"     \"></a>
                       
-                  </div>
-                  <div class="form-group row">
-                    Password:
-                      <div class="col-xs-12 col-md-12">
-                          <input type="text" class="form-control" name="password" placeholder="Password" rows="6" required></input>
-                      </div>
-                  </div>
-                   <input type="submit" value="Login" name="log_user" class="form-control btn btn-primary">
-              </form>
-          </div>
-      </div>
-     </div>
-
-	
-	 
-     
-</div>
-
-<!-- Contact section Ended -->
+                        </div>
+                              
+                            </figure>
+                        </div>
+						
+						
+                            <p>$value[eng]</p>
+                        </div> 						
+							 </div>					
+												
+								      </div>
+                <div class=\"col-sm-12 col-12 box-12\"  data-aos=\"fade-up\" data-aos-delay=\"300\">
+                    <div class=\"row box\">
+                        <div class=\"col-sm-1 col-12\">
+                            <i class=\"fa fa-desktop\" aria-hidden=\"true\"></i>
+                        ";				
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+                        }
+                    }                 
+                  ?>
+						
+						
+                     
+						
+						
+						
+                   
+           
+                        
+    </section>
 
     <section class="section-7">
         <!-- Footer -->

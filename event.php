@@ -1,36 +1,66 @@
-
 <?php
+
   include('lang.php');
 
 $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
+$selang= $_GET['lang'];
+$_SESSION['lang']=$selang;
 
 
-include_once './manage/gallery/galleryClass.php';
+
+
+include_once('phplib/db_config.php');
+
+include_once 'include/galleryClass.php';
 $galleryClass=new galleryClass();
-$albumList=$galleryClass->listAlbum();
 
-session_start();
-
-$selang=$_GET['lang'];
-
-
-  include('lang.php');
-
-$default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
-
-$_SESSION['lang']=$default;
+$news=$galleryClass->news();
 
 
 
-$news=$galleryClass->news1();
+
+ if(isset($_POST['log_user'])) {
+	
+      // username and password sent from form 
+      $email    = "";
+     
+      $myusername1 = mysqli_real_escape_string($con, $_POST['name']);
+		$mypassword = mysqli_real_escape_string($con, $_POST['password']);
+		
+
+      $sql = "SELECT Username,Password FROM login WHERE Username = '$myusername1' and password = '$mypassword'";
+     
+      
+	  $result=mysqli_query($con, $sql);	
+        $count=$result->num_rows;
+        if($count< 1){
+            
+        }
+        else
+        {
+			
+             header("location: manage/index.html");
+				
+         
+						
+			}
+	  
+	  
+	  
+	
+   }
+   
+  
+         ?>
 
 
-
-?>
-<html >
+ 
+ 
+ 
+<html lang="en">
 
 <head>
-    <!-- Required meta tags -->
+   <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -156,78 +186,166 @@ $news=$galleryClass->news1();
 
 				  
 	?>
-			  </div>
-
-				
-		
+			  </div>   </div> 
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Gallery</h1>
-                <!-- <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2> -->
+                <h1 data-aos="fade-right" data-aos-delay="300">Event</h1>
+
             </div>
             <!--container-fluid end-->
         </div>
     </section>
-<body  >
-   
-    <!--Section-5-->
-    <section class="section-5">
-        <?php
-		echo '<div class="container-fluid">
-            <div class="row"  data-aos="fade-up" data-aos-delay="300">';
-    if(count($albumList)){
-    foreach ($albumList as $value) {
-		$albumimg=$value['AlbumId'];
-		
-		$imgurl=$galleryClass->Albumimg($albumimg);
-	 foreach ($imgurl as $value1) {
-		$urlvalue=$value1['ImageName'];
-		$url='galleryImage/'.$urlvalue;
-		
-		echo'
-                  <a href="gallery_album.php?id='.$value["AlbumId"].'"  class="col-sm-3 box">
-                  <img src='.$url.' class="img-fluid">
-                  <div class="overlay">
-                  <img src="images/plus-img.png" alt="plus-icon">
-                  <div class="inner-text"><h4>'.$value["AlbumName"].' <span>top view</span></h4></div>
-				 
-                  </div>
-                </a>
-                
-       ';
-		
-		
-	}
-	}
-    }
-	echo '  </div>
-        <!--container-->
-    </section>';
+
+<!-- Contact section Start -->
+<div id="contact">
+ 
 	
-    ?>
-      
-    
-      
+	 
+     
+</div>
+
+<!-- Contact section Ended -->
+
+    <section class="section-7">
+        <!-- Footer -->
+        <footer class="page-footer font-small stylish-color-dark">
+
+            <!-- Footer Links -->
+            <div class="container text-center text-md-left">
+
+                <!-- Grid row -->
+                <div class="row">
+
+                    <!-- Grid column -->
+                    <div class="col-lg-5 col-sm-12 mx-auto box-1">
+
+                        <!-- Content -->
+                        <a href="index.html"><img src="images/footer-logo.png" alt="footer-logo"></a>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five</p>
+
+                    </div>
+                    <!-- Grid column -->
+
+                    <hr class="clearfix w-100 d-md-none">
+
+                    <!-- Grid column -->
+                    <div class="col-lg-2 col-sm-4 box-2 mx-auto">
+
+                        <!-- Links -->
+                        <h5>Site Navigation</h5>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="index.html">go to home</a>
+                            </li>
+                            <li>
+                                <a href="services.html">services</a>
+                            </li>
+                            <li>
+                                <a href="portfolio.html">portfolio</a>
+                            </li>
+                            <li>
+                                <a href="blog.html">read blog</a>
+                            </li>
+                            <li>
+                                <a href="contact.html">contact us</a>
+                            </li>
+                            <li>
+                                <a href="contact.html">product support</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <!-- Grid column -->
+
+                    <hr class="clearfix w-100 d-md-none">
+
+                    <!-- Grid column -->
+                    <div class="col-lg-2 col-sm-4 box-3 mx-auto">
+
+                        <!-- Links -->
+                        <h5>information</h5>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#!">user login</a>
+                            </li>
+                            <li>
+                                <a href="#!">creat new account</a>
+                            </li>
+                            <li>
+                                <a href="#!">checkout</a>
+                            </li>
+                            <li>
+                                <a href="#!">my cart</a>
+                            </li>
+                            <li>
+                                <a href="#!">other information</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <!-- Grid column -->
+
+                    <hr class="clearfix w-100 d-md-none">
+
+                    <!-- Grid column -->
+                    <div class="col-lg-2 col-sm-4 box-4 mx-auto">
+
+                        <!-- Links -->
+                        <h5>policies & Info</h5>
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="#!">Terms Conditions </a>
+                            </li>
+                            <li>
+                                <a href="#!">website polocy</a>
+                            </li>
+                            <li>
+                                <a href="#!">Policy for Sellers </a>
+                            </li>
+                            <li>
+                                <a href="#!">Policy for Buyers</a>
+                            </li>
+                            <li>
+                                <a href="#!">Shipping & Refund </a>
+                            </li>
+                            <li>
+                                <a href="#!">Wholesale Policy</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <!-- Grid column -->
+
+                </div>
+                <!-- Grid row -->
+
+            </div>
+            <!-- Footer Links -->
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center">
+                <div class="gradient"></div>
+                <p>© 2017, All Rights reserved. more theme, designed by<a href="https://www.template.net/editable/websites/html5"> tEMPLATE.net</a></p>
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+        <!-- Footer -->
+    </section>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
     <script src="js/animate.js"></script>
     <script src="js/custom.js"></script>
-    <script>
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-           
-
-             // Intialize gallery
-             var gallery = $('.gallery a').simpleLightbox();
-         });
-    </script>
 </body>
 
 </html>

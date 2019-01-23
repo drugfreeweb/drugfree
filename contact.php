@@ -1,36 +1,31 @@
-
 <?php
-  include('lang.php');
+session_start();
+
+ include('lang.php');
 
 $default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
 
 
-include_once './manage/gallery/galleryClass.php';
-$galleryClass=new galleryClass();
-$albumList=$galleryClass->listAlbum();
 
-session_start();
 
 $selang=$_GET['lang'];
 
 
-  include('lang.php');
 
-$default= ($_GET['lang']=='') ? 'en' : $_GET['lang'];
+
 
 $_SESSION['lang']=$default;
 
+include_once 'include/galleryClass.php';
+$galleryClass=new galleryClass();
 
+$news=$galleryClass->news();
 
-$news=$galleryClass->news1();
-
-
-
-?>
-<html >
+ ?>
+<html lang="en">
 
 <head>
-    <!-- Required meta tags -->
+     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -156,78 +151,69 @@ $news=$galleryClass->news1();
 
 				  
 	?>
-			  </div>
-
-				
-		
+			  </div>	  </div>
     <!--Section-1-->
     <section class="section-1">
         <div class="jumbotron d-flex align-items-center">
             <div class="gradient"></div>
             <div class="container-fluid content">
-                <h1 data-aos="fade-right" data-aos-delay="300">Gallery</h1>
-                <!-- <h2 data-aos="fade-left" data-aos-delay="300">the multipurpose psd wordrpess theme</h2> -->
+                <h1 data-aos="fade-right" data-aos-delay="300">Contact Us</h1>
+
             </div>
             <!--container-fluid end-->
         </div>
     </section>
-<body  >
-   
-    <!--Section-5-->
-    <section class="section-5">
-        <?php
-		echo '<div class="container-fluid">
-            <div class="row"  data-aos="fade-up" data-aos-delay="300">';
-    if(count($albumList)){
-    foreach ($albumList as $value) {
-		$albumimg=$value['AlbumId'];
-		
-		$imgurl=$galleryClass->Albumimg($albumimg);
-	 foreach ($imgurl as $value1) {
-		$urlvalue=$value1['ImageName'];
-		$url='galleryImage/'.$urlvalue;
-		
-		echo'
-                  <a href="gallery_album.php?id='.$value["AlbumId"].'"  class="col-sm-3 box">
-                  <img src='.$url.' class="img-fluid">
-                  <div class="overlay">
-                  <img src="images/plus-img.png" alt="plus-icon">
-                  <div class="inner-text"><h4>'.$value["AlbumName"].' <span>top view</span></h4></div>
-				 
-                  </div>
-                </a>
-                
-       ';
-		
-		
-	}
-	}
-    }
-	echo '  </div>
-        <!--container-->
-    </section>';
-	
-    ?>
-      
-    
-      
+
+<!-- Contact section Start -->
+<div id="contact">
+  <div class="container">
+
+  <div class="row" data-aos="fade-up" data-aos-delay="300">
+      <div class="col-md-12 text-left">
+          <p>
+Dr. Samantha Kumara Kithalawaarachchi<br>
+Director<br>
+Presidential Task Force on Drug Prevention<br><br>
+Address -<br>
+Presidential Secretariat,<br>
+Colombo 01,<br>
+Sri Lanka.<br><br>
+Tel - +94 (0) 11 235 4354<br>
++94 (0) 11 235 4614<br>
+Fax - +94 (0) 11 235 4561<br>
+E-mail - psdp@presidentsoffice.lk
+
+      </div>
+  </div>
+    </div>
+
+</div>
+
+<!-- Contact section Ended -->
+
+    <section class="section-7">
+        <!-- Footer -->
+        <footer class="page-footer font-small stylish-color-dark">
+
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center">
+                <div class="gradient"></div>
+                <p>© 2019, All Rights reserved. Designed by<a href="http://www.zacseed.com/"> Zacseed</a></p>
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+        <!-- Footer -->
+    </section>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
     <script src="js/animate.js"></script>
     <script src="js/custom.js"></script>
-    <script>
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-           
-
-             // Intialize gallery
-             var gallery = $('.gallery a').simpleLightbox();
-         });
-    </script>
 </body>
 
 </html>
